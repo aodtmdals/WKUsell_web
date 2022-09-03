@@ -1,0 +1,79 @@
+.login {
+  width: 410px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.login h2 {
+  padding: 0 0 20px;
+  border-bottom: 2px solid #111;
+  text-align: center;
+  line-height: 1;
+  font-size: 32px;
+  color: #111;
+}
+.login li {
+  padding: 0 0 12px;
+}
+.login li input {
+  width: 350px;
+  height: 46px;
+  box-sizing: border-box;
+  text-indent: 16px;
+}
+.login li input::-webkit-input-placeholder {
+  font-size: 16px;
+  color: #9fa19f;
+}
+.login li input[type="checkbox"] {
+  position: absolute;
+  left: -3000%;
+}
+.login li input[type="checkbox"] + label::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #666;
+  background: #fff;
+  vertical-align: -5px;
+}
+.login button {
+  width: 100%;
+  height: 56px;
+  background: #ed1c24;
+  font-size: 18px;
+  color: #fff;
+}
+.login div ul {
+  display: flex;
+  justify-content: center;
+}
+.login div ul li {
+  position: relative;
+  padding: 0 18px;
+}
+
+.login div ul li ~ li:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  height: 14px;
+  width: 1px;
+  background: #111;
+  transform: rotate(25deg);
+}
+
+.login div ul li a {
+  font-size: 14px;
+  color: #111;
+}
+
+.login > a {
+  padding: 0 0 10px;
+  font-size: 14px;
+  color: #666;
+  border-bottom: 1px solid #666;
+}
