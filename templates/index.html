@@ -1,26 +1,22 @@
 {% extends "base.html"  %}
 {% block content %}
-    <h1>마이페이지</h1>
-    <div>    
-        <div>
-            <select name="search">
-                <option value="late">최신</option>
-                <option value="title">제목</option>
-            </select>
-            <input type="text">
-            <input class="search_button" type="button" value="검색">
-        </div>
-        <div class="mypage_list">
-            <ul>
-                {% for key, value in template_students | dictsort %}
-                    <div>
-                        <li><a href="/student/{{ key }}">{{ value["name"] }}</a></li>
-                    </div>
-                {% endfor%}
-            </ul>
-        </div>
-        <div>
-            <input class="create_button" type="button" value="글쓰기" onclick="location.href='/create'">
-        </div>
+<div class="sec_cal">
+    <div class="cal_nav">
+      <a href="javascript:;" class="nav-btn go-prev">prev</a>
+      <div class="year-month"></div>
+      <a href="javascript:;" class="nav-btn go-next">next</a>
     </div>
+    <div class="cal_wrap">
+      <div class="days">
+        <div class="day">MON</div>
+        <div class="day">TUE</div>
+        <div class="day">WED</div>
+        <div class="day">THU</div>
+        <div class="day">FRI</div>
+        <div class="day">SAT</div>
+        <div class="day">SUN</div>
+      </div>
+      <div class="dates"></div>
+    </div>
+  </div>
 {% endblock %}
