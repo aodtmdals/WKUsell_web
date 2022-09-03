@@ -7,5 +7,8 @@ def index():
 @app.route("/create")
 def create():
     return render_template("create.html")
+@app.route("/login")
+def login():
+    return render_template("login.html")
 if __name__ == '__main__':
     app.run(debug=True)
