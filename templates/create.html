@@ -1,6 +1,12 @@
 {% extends "base.html" %} {% block content %}
 <h2>글쓰기</h2>
-<div class="img">
-  <input class="img_upload" type="button" value="사진 업로드" />
+<div class="create">
+  <div class="img">
+    <input class="img_upload" type="button" value="사진 업로드" />
+  </div>
+  <div class="select_date"><input type="date" name="startday" /></div>
+  <div class="insert_content">
+    <input type="textbox" value="내용을 입력해주세요" />
+  </div>
 </div>
 {% endblock %}

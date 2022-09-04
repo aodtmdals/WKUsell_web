@@ -1,3 +1,6 @@
+ul {
+  list-style: none;
+}
 .login {
   width: 410px;
   position: absolute;
