@@ -1,2 +1,13 @@
-@import url("login.css");
 @import url("product.css");
+@import url("login.css");
+
+a,
+a ::after {
+  list-style: none;
+  color: #111;
+}
+
+a :hover {
+  color: #111;
+  opacity: 70%;
+}
