@@ -15,28 +15,23 @@ ul {
 .login li {
   padding: 6px 20px 12px 20px;
 }
-.login li input {
+.login li input[type="text"],
+.login li input[type="password"] {
   width: 100%;
   height: 46px;
   box-sizing: border-box;
   text-indent: 16px;
-}
-.login li input::-webkit-input-placeholder {
-  font-size: 16px;
-  color: #9fa19f;
+  cursor: text;
 }
 .login li input[type="checkbox"] {
-  position: absolute;
-  left: -3000%;
+  width: 15px;
+  height: 15px;
+  box-sizing: border-box;
+  text-indent: 16px;
+  cursor: pointer;
 }
-.login li input[type="checkbox"] + label::before {
-  content: "";
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  border: 1px solid #666;
-  background: #fff;
-  vertical-align: -5px;
+.login li label {
+  cursor: pointer;
 }
 .login button {
   width: 100%;

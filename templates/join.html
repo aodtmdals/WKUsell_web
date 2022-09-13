@@ -13,44 +13,67 @@
           <tbody>
             <tr>
               <th><span>아이디</span></th>
-              <td><input type="text" placeholder="ID 를 입력하세요." /></td>
+              <td>
+                <input name="id" type="text" placeholder="ID 를 입력하세요." />
+              </td>
             </tr>
             <tr>
               <th><span>이름</span></th>
-              <td><input type="text" placeholder="" /></td>
+              <td><input name="nickname" type="text" placeholder="" /></td>
             </tr>
             <tr>
               <th><span>비밀번호</span></th>
               <td>
-                <input type="text" placeholder="비밀번호를 입력해주세요." />
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="비밀번호를 입력해주세요."
+                />
               </td>
             </tr>
             <tr>
               <th><span>비밀번호 확인</span></th>
               <td>
-                <input type="text" placeholder="비밀번호를 확인하세요" />
+                <input
+                  name="password_check"
+                  type="password"
+                  placeholder="비밀번호를 확인하세요"
+                />
               </td>
             </tr>
             <tr class="email">
               <th><span>이메일</span></th>
               <td>
-                <input type="text" class="email" placeholder="" /><span
-                  class="mar10"
-                  >@</span
-                >
+                <input
+                  name="email"
+                  type="email"
+                  class="email"
+                  placeholder=""
+                /><span class="mar10">@</span>
                 <input type="text" class="email email2" placeholder="" />
               </td>
             </tr>
 
             <tr>
               <th><span>휴대폰 번호</span></th>
-              <td><input type="text" placeholder="ID 를 입력하세요." /></td>
+              <td>
+                <input
+                  name="phone"
+                  type="text"
+                  placeholder="전화번호를 입력하세요."
+                />
+              </td>
             </tr>
 
             <tr>
               <th><span>인증번호 확인</span></th>
               <td>
-                <input type="text" class="send_number" placeholder="10:00" />
+                <input
+                  name="check"
+                  type="text"
+                  class="send_number"
+                  placeholder="10:00"
+                />
                 <a href="javascript:;" class="btn_confirm">인증번호 발송</a>
               </td>
             </tr>

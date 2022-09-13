@@ -1,3 +1,94 @@
 {% extends "base.html" %} {% block content %}
-<div></div>
+<div class="mt-4">
+  <div class="product-slider my-3">
+    <div
+      id="carouselExampleIndicators"
+      class="carousel carousel-dark slide"
+      data-bs-ride="carousel"
+    >
+      <ol class="carousel-indicators">
+        <li
+          data-bs-target="#carouselExampleIndicators"
+          data-bs-slide-to="0"
+          class="active"
+        ></li>
+        <li
+          data-bs-target="#carouselExampleIndicators"
+          data-bs-slide-to="1"
+        ></li>
+        <li
+          data-bs-target="#carouselExampleIndicators"
+          data-bs-slide-to="2"
+        ></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img
+            src="https://image.aladin.co.kr/product/29010/19/cover500/8956615128_1.jpg"
+            class="d-block w-100"
+            alt="..."
+          />
+        </div>
+      </div>
+      <a
+        class="carousel-control-prev"
+        href="#carouselExampleIndicators"
+        role="button"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </a>
+      <a
+        class="carousel-control-next"
+        href="#carouselExampleIndicators"
+        role="button"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="mt-5">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="product-notice p-2 border border-danger rounded">
+            <ul>
+              <h2>최신글</h2>
+              <li><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+              <li><a href="#">5</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="product-notice p-2 border border-danger rounded">
+            <ul>
+              <h2>인기글</h2>
+              <li><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+              <li><a href="#">5</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="popular-search px-4">
+      <h2 class="text-center">인기 검색어</h2>
+      <div class="row align-items-center justify-content-around mt-3">
+        <div class="popular-itmes col-1"><a href="#">1</a></div>
+        <div class="popular-itmes col-1"><a href="#">2</a></div>
+        <div class="popular-itmes col-1"><a href="#">3</a></div>
+        <div class="popular-itmes col-1"><a href="#">4</a></div>
+        <div class="popular-itmes col-1"><a href="#">5</a></div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
