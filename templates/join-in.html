@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% block content %}
+<main class="mt-5">
+  <div class="container">
+    <section class="login">
+      <h2>로그인</h2>
+      <form action="." method="post">
+        <ul>
+          <li><input name="id" type="text" placeholder="아이디" title="아이디입력" /></li>
+          <li>
+            <input name="password" type="password" placeholder="비밀번호" title="비밀번호 입력"  />
+          </li>
+          <li id="save_ids">
+            <input type="checkbox" id="chk_id" name="save_ids"/>
+              <label for="chk_id">아이디 저장</label>
+          </li>
+          <li><button type="submit" id="login_button">로그인</button></li>
+        </ul>
+      </form>
+      <div>
+        <ul>
+          <li><a href="">회원가입</a></li>
+          <li><a href="">아이디 찾기</a></li>
+          <li><a href="">비밀번호 찾기</a></li>
+        </ul>
+    </section>
+  </div>
+</main>
+{% endblock %}

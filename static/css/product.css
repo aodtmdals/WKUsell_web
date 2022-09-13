@@ -1,3 +1,20 @@
 .card {
   margin-bottom: 10px;
 }
+
+.product-slider img {
+  height: 600px;
+}
+
+.product-notice h2 {
+  text-align: center;
+  color: #111;
+}
+
+.popular-search {
+  margin-top: 50px;
+}
+
+.create-btn button {
+  float: right;
+}
