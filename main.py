@@ -47,21 +47,23 @@ def db_connector():
 app = Flask(__name__)
 
 @app.route('/')
-#def index():
-#    return render_template("index.html")
-# 일단 리스트 보여주는 페이지를 메인 페이지로 둠 추후에 변경
-def product_list():
-    return render_template("list.html")
+def index():
+    return render_template("index.html")
 @app.route("/create")
 def create():
     return render_template("create.html")
-@app.route("/login")
-def login():
-    return render_template("login.html")
+@app.route("/join-in")
+def join_in():
+    return render_template("join-in.html")
+@app.route("/join")
+def join():
+    return render_template("join.html")
 @app.route("/detail")
 def detail():
     return render_template("detail.html")
-#@app.route("/list")
+@app.route("/list")
+def product_list():
+    return render_template("list.html")
 if __name__ == '__main__':
     print(db_connector())
     app.run(host='0.0.0.0', debug=True, port=1000)
