@@ -10,9 +10,9 @@ function passwordCheck() {
   const pw = document.getElementById("password").value;
   const pwCheck = document.getElementById("password-check").value;
 
-  if (pw.length < 8 || pw.length > 16) {
+  if (pw.length < 8 || pw.length > 20) {
     pwText.innerHTML =
-      "비밀번호는 8~16글자, 특수문자가 하나 이상 들어가야합니다.";
+      "비밀번호는 8~20글자, 특수문자가 하나 이상 들어가야합니다.";
     pwText.style.color = "red";
   } else if (pw != "" && pwCheck != "") {
     if (pw == pwCheck) {
@@ -52,6 +52,15 @@ function innerTextCheck() {
   }
 }
 
+function disableID() {
+  if (window.localStorage.key("savedID") != null) {
+    $("input[name=revise-id]").attr(
+      "value",
+      window.localStorage.getItem("savedID")
+    );
+  }
+}
+
 // 아이디 중복 검사
 function check_dup() {
   let username = $("#input-username").val();
@@ -79,3 +88,5 @@ function check_dup() {
     },
   });
 }
+
+disableID();
