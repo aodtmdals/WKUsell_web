@@ -5,9 +5,11 @@ a,
 a ::after {
   list-style: none;
   color: #111;
+  cursor: pointer;
 }
 
 a :hover {
   color: #111;
   opacity: 70%;
+  cursor: pointer;
 }

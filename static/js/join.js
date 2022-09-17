@@ -5,12 +5,14 @@ const emailText = document.querySelector(".email-text");
 const phoneText = document.querySelector(".phone-text");
 const joinBtn = document.getElementById("join");
 
+//회원가입 시 페스워드 중복검사 +
 function passwordCheck() {
   const pw = document.getElementById("password").value;
   const pwCheck = document.getElementById("password-check").value;
 
   if (pw.length < 8 || pw.length > 16) {
-    pwText.innerHTML = "비밀번호는 8글자 이상, 16글자 이하만 가능합니다.";
+    pwText.innerHTML =
+      "비밀번호는 8~16글자, 특수문자가 하나 이상 들어가야합니다.";
     pwText.style.color = "red";
   } else if (pw != "" && pwCheck != "") {
     if (pw == pwCheck) {
@@ -25,8 +27,9 @@ function passwordCheck() {
   }
 }
 
+//아이디와 닉네임 값이 들어왔는지 체크
 function innerTextCheck() {
-  const id = document.getElementById("id").value;
+  const id = document.getElementById("input-username").value;
   const nickname = document.getElementById("nickname").value;
 
   if (id == " ") {
@@ -49,47 +52,30 @@ function innerTextCheck() {
   }
 }
 
-function check_id() {
+// 아이디 중복 검사
+function check_dup() {
   let username = $("#input-username").val();
-  if (username == "") {
-    $("#help-id")
-      .text("아이디를 입력해주세요.")
-      .removeClass("is-safe")
-      .addClass("is-danger");
-    $("#input-username").focus();
-    return;
-  }
-  if (!is_username(username)) {
-    $("#help-id")
-      .text(
-        "아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이"
-      )
-      .removeClass("is-safe")
-      .addClass("is-danger");
-    $("#input-username").focus();
-    return;
-  }
-  $("#help-id").addClass("is-loading");
+  $(".id-text").addClass("is-loading");
   $.ajax({
     type: "POST",
-    url: "/join/id-overlap",
+    url: "/join/checkDup",
     data: {
       id: username,
     },
     success: function (response) {
       if (response["exists"]) {
-        $("#help-id")
+        $(".id-text")
           .text("이미 존재하는 아이디입니다.")
           .removeClass("is-safe")
           .addClass("is-danger");
         $("#input-username").focus();
       } else {
-        $("#help-id")
+        $(".id-text")
           .text("사용할 수 있는 아이디입니다.")
           .removeClass("is-danger")
           .addClass("is-success");
       }
-      $("#help-id").removeClass("is-loading");
+      $(".id-text").removeClass("is-loading");
     },
   });
 }
