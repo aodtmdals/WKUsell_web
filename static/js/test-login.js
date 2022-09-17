@@ -10,7 +10,7 @@ function saveID() {
 }
 
 function getSavedId() {
-  let ischecked = document.querySelector("#chk_id").checked;
+  let ischecked = document.querySelector("#chk_id");
 
   if (window.localStorage.key("savedID") != null) {
     $("input[name=join-id]").attr(
@@ -18,9 +18,6 @@ function getSavedId() {
       window.localStorage.getItem("savedID")
     );
     $("input[name=save_ids]").attr("checked", true);
-  } else {
-    userID = "";
-    ischecked = false;
   }
 }
 
