@@ -47,6 +47,25 @@
             </li>
           </ul>
           <!-- 회원가입/ 로그인 버튼-->
+          {% if username %}
+          <div class="join">
+            <div class="me-4 mb-2 mb-lg-0">
+              <input
+                class="btn btn-outline-secondary"
+                type="button"
+                value="로그아웃"
+                onclick="location.href='/join-out';"
+              />
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                onclick="location.href='/join';"
+              >
+                {{username}}
+              </button>
+            </div>
+          </div>
+          {%else%}
           <div class="join">
             <div class="me-4 mb-2 mb-lg-0">
               <input
@@ -63,6 +82,7 @@
               />
             </div>
           </div>
+          {% endif %}
           <!-- 검색창 -->
           <form class="d-flex">
             <input
@@ -79,7 +99,7 @@
         </div>
       </div>
     </nav>
-    {% block content %}{% endblock %}
+    {% block content %} {% endblock %}
     <!-- 페이지 하단 -->
     <footer class="mt-5 py-5 bg-light">
       <div class="row">
@@ -161,5 +181,6 @@
     ></script>
     <script src="/static/js/navgation-bar.js" crossorigin="anonymous"></script>
     <script src="/static/js/join.js" crossorigin="anonymous"></script>
+    <script src="/static/js/test-login.js" crossorigin="anonymous"></script>
   </body>
 </html>
