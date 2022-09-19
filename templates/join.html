@@ -1,134 +1,150 @@
 {% extends "base.html" %} {% block content %}
-<main class="mt-3">
+<section class="section">
   <div class="container">
-    <form action="/join/request" method="post">
-      <div class="form_txtInput">
-        <h2 class="sub_tit_txt">회원가입</h2>
-        <p class="exTxt">회원가입시 이메일 인증을 반드시 진행하셔야 합니다.</p>
-        <div class="join_form">
-          <div class="row mb-2">
-          <div class="col-lg-4">
-            <label for="id">아이디</label>
-            <input
-              id="input-username"
-              name="id"
-              type="text"
-              pattern="/^[A-Za-z0-9]{2,20}$/"
-              minlength="2"
-              maxlength="20"
-              placeholder="ID 를 입력하세요."
-              onchange="innerTextCheck()"
-            />
+    <div class="box">
+      <article class="media">
+        <div class="media-content">
+          <div class="content">
+            <!-- 아이디 -->
+            <div class="field has-addons">
+              <div class="control has-icons-left" style="width: 100%">
+                <input
+                  id="input-username"
+                  class="input"
+                  type="text"
+                  placeholder="아이디"
+                />
+                <span class="icon is-small is-left"
+                  ><i class="fa fa-user"></i
+                ></span>
+              </div>
+              <div id="btn-check-dup" class="control">
+                {# is-hidden = 해당 요소가가안 보이게 하는 bulma의 클래스#}
+                <button class="button is-sparta" onclick="check_dup()">
+                  중복확인
+                </button>
+              </div>
+            </div>
+            <p id="help-id" class="help">
+              아이디는 2-20자의 영문과 숫자와 일부 특수문자(._-)만 입력
+              가능합니다.
+            </p>
+            <p id="help-id-login" class="help is-danger"></p>
+            <!-- 닉네임 -->
+            <div class="field has-addons">
+              <div class="control has-icons-left" style="width: 100%">
+                <input
+                  id="input-nickname"
+                  class="input"
+                  type="text"
+                  placeholder="닉네임"
+                />
+                <span class="icon is-small is-left"
+                  ><i class="fa fa-user"></i
+                ></span>
+              </div>
+            </div>
+            <p id="help-nickname" class="help">
+              닉네임은 2자 이상의 한글, 영문, 숫자 입력이 가능합니다.
+            </p>
+            <p id="help-id-nickname" class="help is-danger"></p>
+
+            <!-- 비밀번호 -->
+            <div class="field">
+              <div class="control has-icons-left">
+                <input
+                  id="input-password"
+                  class="input is-outlined"
+                  type="password"
+                  placeholder="비밀번호"
+                />
+                <span class="icon is-small is-left"
+                  ><i class="fa fa-lock"></i
+                ></span>
+              </div>
+              <p id="help-password" class="help">
+                영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요.
+                특수문자(!@#$%^&*)도 사용 가능합니다.
+              </p>
+            </div>
           </div>
-          <button type="button" class="id_overlap_button btn btn-outline-primary col-lg-2" onclick="check_dup()">중복검사</button>
-          <img id="id_check_sucess" style="display: none;">
-          <div class="id-text col-lg-4"></div>
+          <!-- 비밀번호 확인 -->
+          <div id="sign-up-box" class="">
+            <div class="mb-5">
+              <div class="field">
+                <div
+                  class="control is-outlined has-icons-left"
+                  style="width: 100%"
+                >
+                  <input
+                    id="input-password2"
+                    class="input"
+                    type="password"
+                    placeholder="비밀번호 재입력"
+                  />
+                  <span class="icon is-small is-left"
+                    ><i class="fa fa-lock"></i
+                  ></span>
+                </div>
+                <p id="help-password2" class="help">
+                  비밀번호를 다시 한 번 입력해주세요.
+                </p>
+              </div>
+            </div>
           </div>
-          <div class="row mb-2">
-          <div class="col-lg-4">
-            <label for="nickname">닉네임</label>
-            <input id="nickname" name="nickname" type="text" placeholder="" 
-            minlength="2"
-            maxlength="10"
-            onchange="innerTextCheck()" />
-          </div>
-            <div class="nick-text col-lg-4"></div>
-          </div>
-          <div class="col-lg-4 mb-2">
-            <label for="password">비밀번호</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="비밀번호를 입력해주세요."
-              pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$"
-              minlength="8"
-              maxlength="20"
-              onchange="passwordCheck()"
-            />
-          </div>
-          <div class="row mb-2">
-            <div class="col-lg-4">
-              <label for="password-check">비밀번호 확인</label>
+          <!-- 전화번호 입력 -->
+          <div class="field">
+            <div class="control has-icons-left">
               <input
-                id="password-check"
-                name="password-check"
-                type="password"
-                placeholder="비밀번호를 확인하세요"
-                onchange="passwordCheck()"
+                id="input-phone"
+                class="input is-outlined"
+                type="text"
+                placeholder="전화번호"
               />
             </div>
-            <div class="pw-text col-lg-5"></div>
+            <p id="help-phone" class="help">
+              - 없이 숫자만 입력해주세요.
+            </p>
           </div>
-          <div class="row mb-2">
-            <div class="col-lg-8">
-                <label for="email">이메일</label>
-                <input id="email" name="email" type="text" class="email" placeholder="" />
-                <span class="mar10">@</span>
+          <!-- 이메일 입력 -->
+          <div class="field">
+            <div class="control has-icons-left">
+              <input
+                id="input-email"
+                class="input is-outlined"
+                type="text"
+                placeholder="이메일"
+              />
+              <span
+                >@</span>
                 <input
-                  name="email_url"
+                  id="input-email-url"
+                  class="input is-outlined"
                   type="text"
-                  class="email email2"
-                  placeholder=""
-                  onchange="passwordCheck()"
+                  name="email_url"
+                  placeholder="도메인 주소"
                 />
             </div>
-            <div class="email-text"></div>
-          </div>
-          <div class="row mb-2">
-            <div class="col-lg-6">
-              <label for="phone">휴대폰 번호</label>
-              <input
-                id="phone"
-                name="phone"
-                type="text"
-                placeholder="전화번호를 입력하세요."
-                pattern="[0-9]+"
-                onchange="passwordCheck()"
-              />
-            </div>
-            <div class="phone-text col-lg-4"></div>
-          </div>
-        <!-- join_form E  -->
-        <div class="agree_wrap">
-          <div class="checkbox_wrap">
-            <input
-              type="checkbox"
-              id="news_letter"
-              name="news_letter"
-              class="agree_chk"
-            />
-            <label for="news_letter">[선택]뉴스레터 수신동의</label>
-          </div>
-          <div class="checkbox_wrap mar27">
-            <input
-              type="checkbox"
-              id="marketing"
-              name="marketing"
-              class="agree_chk"
-            />
-            <label for="marketing"
-              >[선택]마케팅 목적 개인정보 수집 및 이용에 대한 동의</label
-            >
-            <ul class="explan_txt">
-              <li><span class="red_txt">항목 : 성별, 생년월일</span></li>
-              <li>
-                고객님께서는 위의 개인정보 및 회원정보 수정 등을 통해 추가로
-                수집하는 개인정보에<br />
-                대해 동의하지 않거나 개인정보를 기재하지 않음으로써 거부하실 수
-                있습니다.<br />
-                다만 이때 회원 대상 서비스가 제한될 수 있습니다.
-              </li>
-            </ul>
           </div>
         </div>
-        <div class="btn_wrap">
-          <button type="submit" class="join-btn" id="join">회원가입</button>
+            <nav class="level is-mobile">
+              <button
+                class="level-item button is-rounded is-active"
+                onclick="sign_up()"
+              >
+                회원가입
+              </button>
+              <button
+                class="level-item button is-rounded is-active"
+                onclick="location.href='/'"
+              >
+                취소
+              </button>
+            </nav>
+          </div>
         </div>
-      </div>
-    </form>
-    <!-- form_txtInput E -->
+      </article>
+    </div>
   </div>
-  <!-- content E-->
-</main>
+</section>
 {% endblock %}

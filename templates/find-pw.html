@@ -1,0 +1,120 @@
+{% extends "base.html" %} {% block content %}
+  <main class="mt-5">
+  <div class="container">
+    <form action="/join-in/find/pw/check">
+        <div>
+            <ul>
+                <li><a href="/join-in/find/id">아이디 찾기</a></li>
+                <li><a href="/join-in/find/pw">패스워드 찾기</a></li>
+            </ul>
+        </div>
+        <div class="find-userdata">
+            <h2>패스워드 찾기</h2>
+            <div>
+                <!-- 아이디로 패스워드 찾기 -->
+                <label for="for-id">아이디로 패스워드 찾기</label>
+                <div>
+                    <label for="phone">아이디</label>
+                    <input type="text" name="id"/>
+                </div>
+            </div>
+            <!--js로 함수 입력해 ajax로 값 변경-->
+            <button type="button" onclick="">확인</button>
+        </div>
+    </form>
+    <form action="/join-in/find/pw/request">
+        <div class="find-userdata">
+            <h2>패스워드 수정</h2>
+            <div>            <!-- 비밀번호 -->
+            <div class="field">
+              <div class="control has-icons-left">
+                <input
+                  id="input-password"
+                  class="input is-outlined"
+                  type="password"
+                  placeholder="비밀번호"
+                />
+                <span class="icon is-small is-left"
+                  ><i class="fa fa-lock"></i
+                ></span>
+              </div>
+              <p id="help-password" class="help">
+                영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요.
+                특수문자(!@#$%^&*)도 사용 가능합니다.
+              </p>
+            </div>
+          </div>
+          <!-- 비밀번호 확인 -->
+          <div id="sign-up-box" class="">
+            <div class="mb-5">
+              <div class="field">
+                <div
+                  class="control is-outlined has-icons-left"
+                  style="width: 100%"
+                >
+                  <input
+                    id="input-password2"
+                    class="input"
+                    type="password"
+                    placeholder="비밀번호 재입력"
+                  />
+                  <span class="icon is-small is-left"
+                    ><i class="fa fa-lock"></i
+                  ></span>
+                </div>
+                <p id="help-password2" class="help">
+                  비밀번호를 다시 한 번 입력해주세요.
+                </p>
+              </div>
+            </div>
+          </div>
+            <!-- 비밀번호 -->
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input
+                    id="input-password"
+                    class="input is-outlined"
+                    type="password"
+                    placeholder="비밀번호"
+                    />
+                    <span class="icon is-small is-left"
+                    ><i class="fa fa-lock"></i
+                    ></span>
+                </div>
+                <p id="help-password" class="help">
+                    영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요.
+                    특수문자(!@#$%^&*)도 사용 가능합니다.
+                </p>
+            </div>
+            </div>
+            <!-- 비밀번호 확인 -->
+            <div id="sign-up-box" class="">
+                <div class="mb-5">
+                    <div class="field">
+                        <div
+                        class="control is-outlined has-icons-left"
+                        style="width: 100%"
+                        >
+                        <input
+                            id="input-password2"
+                            class="input"
+                            type="password"
+                            placeholder="비밀번호 재입력"
+                        />
+                        <span class="icon is-small is-left"
+                            ><i class="fa fa-lock"></i
+                        ></span>
+                        </div>
+                        <p id="help-password2" class="help">
+                        비밀번호를 다시 한 번 입력해주세요.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!--js로 함수 입력해 ajax로 값 변경-->
+            <button type="button" onclick="">확인</button>
+        </div>
+    </form>
+  </div>
+</main>
+{% endblock %}

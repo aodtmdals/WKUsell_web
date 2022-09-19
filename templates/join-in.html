@@ -17,11 +17,45 @@
           <li><button type="submit" class="login-button" onclick="saveID()">로그인</button></li>
         </ul>
       </form>
+      <li style="list-style: none"><button>로그인</button></li>
+        <li style="list-style: none">
+          <a href="javascript:kakaoLogin();">
+            <img
+              src="https://www.gb.go.kr/Main/Images/ko/member/certi_kakao_login.png"
+              style="height: 56px; width: 370px"
+          /></a>
+          <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+          <script>
+            window.Kakao.init("fc3e4ed245c715a667077ca12465fb34");
+
+            function kakaoLogin() {
+              window.Kakao.Auth.login({
+                scope: "profile_nickname, account_email, gender", //동의항목 페이지에 있는 개인정보 보호 테이블의 활성화된 ID값을 넣습니다.
+                success: function (response) {
+                  console.log(response); // 로그인 성공하면 받아오는 데이터
+                  window.Kakao.API.request({
+                    // 사용자 정보 가져오기
+                    url: "/v2/user/me",
+                    success: (res) => {
+                      const kakao_account = res.kakao_account;
+                      console.log(kakao_account);
+                    },
+                  });
+                  // window.location.href='/ex/kakao_login.html' //리다이렉트 되는 코드
+                },
+                fail: function (error) {
+                  console.log(error);
+                },
+              });
+            }
+          </script>
+        </li>
+      </ul>
       <div>
         <ul>
           <li><a href="/join">회원가입</a></li>
-          <li><a href="">아이디 찾기</a></li>
-          <li><a href="">비밀번호 찾기</a></li>
+          <li><a href="/join-in/find/id">아이디 찾기</a></li>
+          <li><a href="/join-in/find/password">비밀번호 찾기</a></li>
         </ul>
     </section>
   </div>
