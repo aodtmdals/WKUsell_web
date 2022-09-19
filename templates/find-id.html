@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block content %}
+  <main class="mt-5">
+  <div class="container">
+    <form action="/join-in/find/id/request">
+        <div class="find-userdata">
+            <ul>
+                <li><a href="/join-in/find/id">아이디 찾기</a></li>
+                <li><a href="/join-in/find/pw">패스워드 찾기</a></li>
+            </ul>
+            <h2>아이디 찾기</h2>
+            <div>
+                <!-- 휴대전화로 아이디 찾기 -->
+                <input type="radio" id="for-phone" value="phone" name="certification">
+                <label for="for-phone">휴대전화로 아이디 찾기</label>
+                <div>
+                    <label for="phone">휴대전화</label>
+                    <input type="text" name="phone"/>
+                </div>
+                <!-- 이메일로 아이디 찾기 -->
+                <input type="radio" id="for-phone" value="phone" name="certification">
+                <label for="for-phone">이메일로 아이디 찾기</label>
+                <div>
+                    <label for="phone">이메일</label>
+                    <input type="text" name="email"/>
+                </div>
+            </div>
+            <!--js로 함수 입력해 ajax로 값 변경-->
+            <button type="button" onclick="">확인</button>
+        </div>
+    </form>
+  </div>
+</main>
+{% endblock %}

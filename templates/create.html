@@ -2,21 +2,31 @@
 <!--제품등록 -->
 <main class="mt-3">
   <div class="container">
-    <form action="/create/request" method="post">
+    <section class="section">
       <h2 class="text-center">제품등록</h2>
       <!-- 제품명 -->
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label">제품명</label>
-        <div class="col-md-9">
-          <input name="pdName" type="text" class="form-control" />
+        <div class="col-md-9" id="p-name">
+          <input
+            type="text"
+            id="input-p-name"
+            placeholder="특수문자 입력 불가"
+            class="form-control"
+          />
         </div>
       </div>
       <!-- 가격 -->
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label">가격</label>
         <div class="col-md-9">
-          <div class="input-group mb-3">
-            <input name="price" type="number" class="form-control" />
+          <div class="input-group mb-3" id="p-price">
+            <input
+              type="number"
+              id="input-p-price"
+              class="form-control"
+              placeholder="숫자만 입력해주세요."
+            />
             <span class="input-group-text">원</span>
           </div>
         </div>
@@ -27,7 +37,7 @@
         <div class="col-md-9">
           <div class="row">
             <div class="col-auto">
-              <select name="category" class="form-select">
+              <select class="form-select" id="input-p-category">
                 <option value="0">교재</option>
                 <option value="1">전자기기</option>
                 <option value="2">의류</option>
@@ -43,7 +53,7 @@
         <div class="col-md-9">
           <div class="row">
             <div class="col-auto">
-              <input type="checkbox" name="club" />
+              <input type="checkbox" id="check-club" />
             </div>
           </div>
         </div>
@@ -52,19 +62,19 @@
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label">태그</label>
         <div class="col-md-9">
-          <input name="tag" type="text" class="form-control" />
+          <input type="text" class="form-control" id="p-tags" />
         </div>
       </div>
       <!-- 썸네일 이미지 -->
+      <form id="image-file" method="post" enctype="multipart/form-data">
       <div class="mb-3 row">
         <label class="col-md-3 col-form-label">썸네일이미지</label>
         <div class="col-md-9">
           <input
-            name="thumImg"
             type="file"
+            id="t-image"
             class="form-control"
-            accept=".png, .jpeg"
-            enctype="multipart/form-data"
+            accept="image/png, image/jpeg"
           />
           <div class="alert alert-secondary" role="alert">
             <ul>
@@ -80,9 +90,9 @@
         <label class="col-md-3 col-form-label">제품이미지</label>
         <div class="col-md-9">
           <input
-            name="pdImg"
             type="file"
             class="form-control"
+            id="p-image"
             accept="image/png,image/jpeg"
             multiple
           />
@@ -96,6 +106,7 @@
           </div>
         </div>
       </div>
+    </form>
       <!-- 취소/저장 -->
       <div class="mb-3 row">
         <div class="col-6 d-grid p-1">
@@ -108,10 +119,12 @@
           </button>
         </div>
         <div class="col-6 d-grid p-1">
-          <button type="submit" class="btn btn-lg btn-danger">저장하기</button>
+          <button class="btn btn-lg btn-danger" onclick="create_product()">
+            저장하기
+          </button>
         </div>
       </div>
-    </form>
+    </section>
   </div>
 </main>
 {% endblock %}

@@ -3,6 +3,8 @@ from flask import session, request
 from flask_wtf import *
 import pymysql
 import hashlib
+from werkzeug.utils import secure_filename
+import os
 
 # 나중에 DB 데이터 받아올 때 클레스로 받아올 수 있게 가볍게 구상해둔 것
 class DB:
@@ -41,8 +43,8 @@ class DB:
         if(len(cursor.fetchall()) != 0):
             result = True
         else:
-            False
-        print(result)
+            result = False
+        return result
 
     # 회원 정보 수정
     def change_userdata(self, id, pw, name, email, phone):
@@ -53,7 +55,7 @@ class DB:
             .format(password_hash, name, email, phone, id)
 
         cursor.execute(sql)
-        self.db.commit()  
+        self.db.commit()
     
     # 로그인 체크
     def join_check(self, id, pw):
@@ -67,6 +69,44 @@ class DB:
         result = cursor.fetchall()
 
         return result
+
+    # 아이디 찾기
+    def find_id(self, solve, value):
+        # value가 0이면 전화번호로 찾는 것
+        if value == 0:
+            cursor = self.db.cursor()
+
+            sql = """select t1.id from user_data t1 where t1.phone = 
+                    '{0}'""".format(solve)
+
+            cursor.execute(sql)
+            result = cursor.fetchall()
+
+        # value가 1이면 이메일로 찾는 것
+        elif value == 0:
+            cursor = self.db.cursor()
+
+            sql = """select t1.id from user_data t1 where t1.email = 
+                    '{0}'""".format(solve)
+
+            cursor.execute(sql)
+            result = cursor.fetchall()
+        
+        return result
+
+    # 비밀번호 찾기 과정 중 1. 아이디로 고칠 데이터를 찾는다
+    def find_password(self, solve):
+        # value가 0이면 전화번호로 찾는 것
+            cursor = self.db.cursor()
+
+            sql = """select t1.id from user_data t1 where t1.id = 
+                    '{0}'""".format(solve)
+
+            cursor.execute(sql)
+            result = cursor.fetchall()
+
+            return result
+
 
     # 제품 조회
     def product_check(self, id):
@@ -82,14 +122,17 @@ class DB:
         return result
 
     # 제품 등록
-    def insert_product(self, product_id, product_name, product_price, categori, club, user_id):
+    def insert_product(self, product_id, product_name, product_price, categori, tags, club, user_id):
         cursor = self.db.cursor()
 
-        sql = """insert into t_product (product_id, product_name, product_price, categori, club_check, user_id)
-                values({}, '{}', {}, '{}', '{}', '{}')""".format(product_id, product_name, product_price, categori, club, user_id)
+        sql = """insert into t_product (product_id, product_name, product_price, categori, tags, club_check, user_id)
+                values({}, '{}', {}, '{}', {}, '{}', '{}')""".format(product_id, product_name, product_price, categori, tags, club, user_id)
 
         cursor.execute(sql)
-        self.db.commit()  
+        self.db.commit()
+
+    def insert_product_img(self, thumnail, product):
+        cursor = self.db.cursor()
 
 
         
@@ -119,37 +162,45 @@ def create_request():
         product_id = db.product_check(id)
         product_id = len(product_id) + 1
 
-        product_name = request.form["pdName"]
+        product_name = request.form["productname"]
         product_price = request.form["price"]
         product_price = int(product_price)
         category = request.form["category"]
+        tags = request.form["tags"]
 
         # 2-1. 동아리 물품 여부 체크
-        club = request.form.get("club")
-        if club == None:
+        club = request.form["club"]
+        if club == False:
             club = "N"
         else:
             club = "Y"
         
         print(club)
-        # 3. 무조건 입력해야하는 데이터들 먼저 db에 commit
-        db.insert_product(product_id, product_name, product_price, category, club, id)
 
-        # 4. 태그 처리
-        tag = request.form["tag"]
+        # 2-2. 태그에 아무것도 안 들어가있으면 tags = "Null"로 값이 없다는 표시 넣어주기
+        if tags == "":
+            tags = "Null"
 
-        # 5. 이미지 처리
-        # thum_img = request.files["thumImg"].filename
-        # pd_img = request.files["pdImg"]
+        # 3. 사진 외 모든 데이터 먼저 db에 commit
+        db.insert_product(product_id, product_name, product_price, category, tags, club, id)
 
-        # save_thum_img = f"./static/img/thumnails/{id}/{product_id}"
-        # save_thum_url = save_thum_img + thum_img
-        # thum_img.save(save_thum_img)
+        # 4. 이미지 처리
+        t_image = request.files["tImage"]
+        t_image_name = secure_filename(t_image.filename)
+        t_image_path = "D:\github\calendar_web\img\{}\{}\\thumnail\\".format(id, product_id)
+        os.makedirs(t_image_path, exist_ok=True)
+        t_image.save(os.path.join(t_image_path, t_image_name))
 
-        # print("pd_img = {}, thum_img = {}".format(save_thum_url, thum_img.filename))
-        return redirect(url_for("product_list"))
-    else:
-        return render_template("join.html")
+
+        #다중 이미지 업로드 오류
+        p_image = request.files.getlist("pImage")
+        p_image_path = "D:\github\calendar_web\img\{}\{}\\product-image\\".format(id, product_id)
+        os.makedirs(p_image_path, exist_ok=True)
+        for p_image_name in p_image:
+            p_image_name.save(os.path.join(p_image_path, p_image_name.filename))
+            print(p_image_name)
+
+        return jsonify({'result': 'success'})
 
 # 로그인 관련 코드
 @app.route("/join-in")
@@ -171,6 +222,30 @@ def join_in_confirm():
             session["userID"] = result[0][0]
             session["username"] = result[0][2]
             return redirect(url_for("index"))
+#아이디 찾기
+@app.route("/join-in/find/id")
+def join_in_find_id():
+    return render_template("find-id.html")
+@app.route("/join-in/find/id/request", methods=["POST"])
+def join_in_find_id():
+    result = request.form["result"]
+    select_id = request.form["select_id"]
+
+    # 함수 실행시켜 아이디 받아오기
+    id = db.find_id(result)
+
+#비밀번호 찾기
+@app.route("/join-in/find/pw")
+def join_in_find_pw():
+    return render_template("find-pw.html")
+@app.route("/join-in/find/pw/check", methods=["POST"])
+def join_in_find_id():
+    result = request.form["result"]
+
+    # 함수 실행시켜 아이디 받아오기
+    id = db.find_id(result)
+
+
 # 로그아웃 코드
 @app.route("/join-out")
 def join_out():
@@ -187,23 +262,23 @@ def join():
 def join_request():
     if request.method == "POST":
         id = request.form["id"]
-        password = request.form["password"]
+        password = request.form["pw"]
         nickname = request.form["nickname"]
-        email = request.form["email"] + "@" + request.form["email_url"]
+        email = request.form["email"]
         phone = request.form["phone"]
 
         print("id = {}, password = {}, email = {}, phone = {}, nickname = {}".format(id, password, email, phone, nickname))
         db.insert_join(id, password, nickname ,email, phone)
-        return render_template("index.html")
+        return jsonify({'result': 'success'})
     else:
         return render_template("join.html")
 
-# 2. 아이디 중복 검사 부분. 추후에 추가 예정
-# @app.route('/join/checkDup', methods=['POST'])
-# def check_dup():
-#     id_receive = request.form['id']
-#     exists = db.id_overlap(id_receive)
-#     return jsonify({'result': 'success', 'exists': exists})
+# 2. 아이디 중복 검사
+@app.route('/join/checkDup', methods=['POST'])
+def check_dup():
+    id_receive = request.form['id']
+    exists = db.id_overlap(id_receive)
+    return jsonify({'result': 'success', 'exists': exists})
 
 # 상품 디테일 페이지 관련 코드
 @app.route("/detail")
@@ -230,9 +305,9 @@ def user_revise_request():
     userID = session.get("userID", None)
     if request.method == "POST":
         id = userID
-        password = request.form["password"]
+        password = request.form["pw"]
         nickname = request.form["nickname"]
-        email = request.form["email"] + "@" + request.form["email_url"]
+        email = request.form["email"]
         phone = request.form["phone"]
 
         print("id = {}, password = {}, email = {}, phone = {}, nickname = {}".\
