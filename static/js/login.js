@@ -1,3 +1,4 @@
+//사용은 우선 보류함
 function login() {
   const form = document.login_form;
   const chkUsername = checkValidUsername(form);
