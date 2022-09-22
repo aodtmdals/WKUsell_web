@@ -15,11 +15,24 @@ function is_select(self) {
   }
   console.log(itemsID)
 
+
+
+
+
+
+  // get으로 서버에 전달
+  // 이상한 부분 과정 2
   $.ajax({
     url: "/list",
     data: {categori: itemsID},
-    method: "GET",
+    method: "get",
     success: function(response){
     }
   })
+
+
+
+
+
+
 }
