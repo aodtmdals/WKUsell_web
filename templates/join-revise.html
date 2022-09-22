@@ -21,10 +21,6 @@
                 ></span>
               </div>
             </div>
-            <p id="help-id" class="help is-success">
-              아이디는 2-20자의 영문과 숫자와 일부 특수문자(._-)만 입력
-              가능합니다.
-            </p>
             <p id="help-id-login" class="help is-danger"></p>
             <!-- 닉네임 -->
             <div class="field has-addons">
@@ -99,6 +95,7 @@
                 type="text"
                 name="phone"
                 placeholder="전화번호"
+                disabled
               />
             </div>
             <p id="help-phone" class="help">
@@ -114,6 +111,7 @@
                 type="text"
                 name="email"
                 placeholder="이메일"
+                disabled
               />
               <span
                 >@</span>
@@ -123,6 +121,7 @@
                   type="text"
                   name="email_url"
                   placeholder="도메인 주소"
+                  disabled
                 />
             </div>
           </div>
@@ -130,7 +129,7 @@
             <nav class="level is-mobile">
               <button
                 class="level-item button is-rounded is-active"
-                onclick="sign_up()"
+                onclick="sign_revise()"
               >
                 정보 수정
               </button>

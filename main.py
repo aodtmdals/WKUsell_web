@@ -1,145 +1,15 @@
 from flask import Flask, render_template, redirect, flash, url_for, jsonify
 from flask import session, request
 from flask_wtf import *
-import pymysql
-import hashlib
-from werkzeug.utils import secure_filename
 import os
-
-# 나중에 DB 데이터 받아올 때 클레스로 받아올 수 있게 가볍게 구상해둔 것
-class DB:
-    def __init__(self):
-        db = pymysql.connect(host='localhost',
-        port=3306,
-        user='root',
-        passwd='accle10032',
-        db='wku_market',
-        charset='utf8')
-
-        self.db = db
-
-    # 회원가입
-    def insert_join(self, id, pw, name, email, phone):
-        password_hash = hashlib.sha256(pw.encode('utf-8')).hexdigest()
-        cursor = self.db.cursor()
-
-        user_data = [id, password_hash, name, email, phone]
-
-        sql = """insert into user_data (id, pw, name, email, phone)
-                values(%s, %s, %s, %s, %s)"""
-
-        cursor.execute(sql, user_data)
-        self.db.commit()  
-
-    # 아이디 중복검사
-    def id_overlap(self, id):
-        cursor = self.db.cursor()
-
-
-        sql = """select t1.id from user_data t1 where t1.id = '{0}'""".format(id)
-
-        cursor.execute(sql)
-        
-        if(len(cursor.fetchall()) != 0):
-            result = True
-        else:
-            result = False
-        return result
-
-    # 회원 정보 수정
-    def change_userdata(self, id, pw, name, email, phone):
-        password_hash = hashlib.sha256(pw.encode('utf-8')).hexdigest()
-        cursor = self.db.cursor()
-
-        sql = """update user_data set pw = '{}', name = '{}', email = '{}', phone = '{}' where id = '{}'"""\
-            .format(password_hash, name, email, phone, id)
-
-        cursor.execute(sql)
-        self.db.commit()
-    
-    # 로그인 체크
-    def join_check(self, id, pw):
-        password_hash = hashlib.sha256(pw.encode('utf-8')).hexdigest()
-        cursor = self.db.cursor()
-
-        sql = """select t1.id, t1.pw, t1.name from user_data t1 where t1.id = 
-                '{0}' and t1.pw = '{1}'""".format(id, password_hash)
-
-        cursor.execute(sql)
-        result = cursor.fetchall()
-
-        return result
-
-    # 아이디 찾기
-    def find_id(self, solve, value):
-        # value가 0이면 전화번호로 찾는 것
-        if value == 0:
-            cursor = self.db.cursor()
-
-            sql = """select t1.id from user_data t1 where t1.phone = 
-                    '{0}'""".format(solve)
-
-            cursor.execute(sql)
-            result = cursor.fetchall()
-
-        # value가 1이면 이메일로 찾는 것
-        elif value == 0:
-            cursor = self.db.cursor()
-
-            sql = """select t1.id from user_data t1 where t1.email = 
-                    '{0}'""".format(solve)
-
-            cursor.execute(sql)
-            result = cursor.fetchall()
-        
-        return result
-
-    # 비밀번호 찾기 과정 중 1. 아이디로 고칠 데이터를 찾는다
-    def find_password(self, solve):
-        # value가 0이면 전화번호로 찾는 것
-            cursor = self.db.cursor()
-
-            sql = """select t1.id from user_data t1 where t1.id = 
-                    '{0}'""".format(solve)
-
-            cursor.execute(sql)
-            result = cursor.fetchall()
-
-            return result
-
-
-    # 제품 조회
-    def product_check(self, id):
-        cursor = self.db.cursor()
-
-        sql = """select t1.user_id 
-                from t_product t1 
-                where t1.user_id = '{}'""".format(id)
-
-        cursor.execute(sql)
-        result = cursor.fetchall()
-
-        return result
-
-    # 제품 등록
-    def insert_product(self, product_id, product_name, product_price, categori, tags, club, user_id):
-        cursor = self.db.cursor()
-
-        sql = """insert into t_product (product_id, product_name, product_price, categori, tags, club_check, user_id)
-                values({}, '{}', {}, '{}', {}, '{}', '{}')""".format(product_id, product_name, product_price, categori, tags, club, user_id)
-
-        cursor.execute(sql)
-        self.db.commit()
-
-    def insert_product_img(self, thumnail, product):
-        cursor = self.db.cursor()
-
-
-        
-      
+from module.DB import DB
 
 app = Flask(__name__)
+
 app.secret_key = "secret key"
+
+
+
 db = DB()
 
 @app.route('/')
@@ -155,11 +25,11 @@ def create():
 def create_request():
     if request.method == "POST":
         # 1. 로그인 된 아이디를 받아온다
-        id = session.get("userID")
+        userID = session.get("userID")
 
         # 2. id를 이용해 몇 개의 상품을 등록했는지 조회하고
         # 갯수를 return한다 (product_id가 됨)
-        product_id = db.product_check(id)
+        product_id = db.product_check(userID)
         product_id = len(product_id) + 1
 
         product_name = request.form["productname"]
@@ -167,6 +37,7 @@ def create_request():
         product_price = int(product_price)
         category = request.form["category"]
         tags = request.form["tags"]
+        detail = request.form["detail"]
 
         # 2-1. 동아리 물품 여부 체크
         club = request.form["club"]
@@ -182,23 +53,31 @@ def create_request():
             tags = "Null"
 
         # 3. 사진 외 모든 데이터 먼저 db에 commit
-        db.insert_product(product_id, product_name, product_price, category, tags, club, id)
+        db.insert_product(product_id, product_name, product_price, category, tags, detail, club, userID)
 
         # 4. 이미지 처리
         t_image = request.files["tImage"]
-        t_image_name = secure_filename(t_image.filename)
-        t_image_path = "D:\github\calendar_web\img\{}\{}\\thumnail\\".format(id, product_id)
+        print(t_image)
+        t_image_path = "D:\WKUsell_web\img\{}\{}\\thumnail\\".format(userID, product_id)
         os.makedirs(t_image_path, exist_ok=True)
+        t_image_name = t_image.filename
         t_image.save(os.path.join(t_image_path, t_image_name))
-
+        save_tImg_path = t_image_path + t_image_name
+        print(save_tImg_path)
 
         #다중 이미지 업로드 오류
         p_image = request.files.getlist("pImage")
-        p_image_path = "D:\github\calendar_web\img\{}\{}\\product-image\\".format(id, product_id)
+        p_image_path = "D:\WKUsell_web\img\{}\{}\product-image\\".format(userID, product_id)
         os.makedirs(p_image_path, exist_ok=True)
+        save_pImg_path = ""
         for p_image_name in p_image:
             p_image_name.save(os.path.join(p_image_path, p_image_name.filename))
-            print(p_image_name)
+            save_pImg_path += p_image_path + p_image_name.filename + ","
+        print(save_pImg_path)
+
+        # DB에 이미지 경로 업로드
+        db.insert_thumnail_img(product_id, save_tImg_path, userID)        
+        db.insert_product_img(product_id, save_pImg_path, userID)
 
         return jsonify({'result': 'success'})
 
@@ -222,29 +101,43 @@ def join_in_confirm():
             session["userID"] = result[0][0]
             session["username"] = result[0][2]
             return redirect(url_for("index"))
+
 #아이디 찾기
 @app.route("/join-in/find/id")
-def join_in_find_id():
+def find_id():
     return render_template("find-id.html")
 @app.route("/join-in/find/id/request", methods=["POST"])
-def join_in_find_id():
+def find_id_request():
     result = request.form["result"]
-    select_id = request.form["select_id"]
 
     # 함수 실행시켜 아이디 받아오기
     id = db.find_id(result)
-
+    return jsonify({"result": "success", "msg" : "{}".format(id)})
 #비밀번호 찾기
 @app.route("/join-in/find/pw")
-def join_in_find_pw():
+def find_pw():
     return render_template("find-pw.html")
+#DB 검색할 아이디 찾기
 @app.route("/join-in/find/pw/check", methods=["POST"])
-def join_in_find_id():
+def find_pw_check():
     result = request.form["result"]
 
-    # 함수 실행시켜 아이디 받아오기
+    # 함수 실행시키기
     id = db.find_id(result)
+    session["id"] = id
+        
+    return jsonify({"result": "success", "msg" : "{}".format(session.get("id"))})
+# 비밀번호 변경
+@app.route("/join-in/find/pw/request", methods=["POST"])
+def find_pw_request():
+    pw = request.form["result"]
+    id = session.get("id")
 
+    # 함수 실행시켜 아이디 받아오기
+    db.revise_pw(id, pw)
+    session.pop("id")
+    
+    return jsonify({"result": "success"})
 
 # 로그아웃 코드
 @app.route("/join-out")
@@ -269,10 +162,9 @@ def join_request():
 
         print("id = {}, password = {}, email = {}, phone = {}, nickname = {}".format(id, password, email, phone, nickname))
         db.insert_join(id, password, nickname ,email, phone)
-        return jsonify({'result': 'success'})
+        return jsonify({"result": "success"})
     else:
         return render_template("join.html")
-
 # 2. 아이디 중복 검사
 @app.route('/join/checkDup', methods=['POST'])
 def check_dup():
@@ -284,12 +176,14 @@ def check_dup():
 @app.route("/detail")
 def detail():
     username = session.get("username", None)
-    return render_template("detail.html", username = username)
-@app.route("/list")
-def product_list():
-    username = session.get("username", None)
-    return render_template("list.html", username = username)
 
+    #상품 정보 받아오기
+
+    return render_template("detail.html", username = username)
+@app.route("/list", methods=["GET"])
+def get_list_categori():
+    datas = "failed"
+    return render_template("list.html", datas=datas)
 # 마이페이지 관련 코드
 @app.route("/user")
 def userpage():
@@ -307,12 +201,10 @@ def user_revise_request():
         id = userID
         password = request.form["pw"]
         nickname = request.form["nickname"]
-        email = request.form["email"]
-        phone = request.form["phone"]
 
-        print("id = {}, password = {}, email = {}, phone = {}, nickname = {}".\
-            format(id, password, email, phone, nickname))
-        db.change_userdata(id, password, nickname, email, phone)
+        print("id = {}, password = {}, nickname = {}".\
+            format(id, password, nickname))
+        db.change_userdata(id, password, nickname)
         return redirect(url_for("userpage", username = username))
     else:
         return render_template("index.html", username = username)

@@ -1,9 +1,98 @@
 {% extends "base.html" %} {% block content %}
-  <main class="mt-5">
+<main class="mt-5">
   <div class="container">
-    <divc class="cart">
-        <h2>장바구니</h2>
-    </div>
+    <divc class="basket">
+      <table class="basket__list">
+        <form>
+          <thead>
+            <tr>
+              <td><input type="checkbox" /></td>
+              <td colspan="2">상품정보</td>
+              <td>카테고리</td>
+              <td>상품금액</td>
+              <td>채팅</td>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- 생활과세무 교재 -->
+            <tr class="basket__list__detail">
+              <td><input type="checkbox" /></td>
+              <td>
+                <img
+                  src="https://image.aladin.co.kr/product/29010/19/cover500/8956615128_1.jpg"
+                  alt="..."
+                  style="width: 30px; min-width: 50px"
+                />
+              </td>
+              <td>
+                <p>2022 생활과 세무실무[판]</p>
+                <sapn class="price">25000원</sapn
+                ><span style="text-decoration: line-through; color: lightgray"
+                  >25,000</span
+                >
+              </td>
+              <td class="basket__list__option">
+                <p class="card-text border-top pt-3">
+                  <span class="badge bg-dark">교재</span>
+                  <span class="badge bg-dark">교양</span>
+                </p>
+              </td>
+              <td>
+                <span class="price">25000원</span>
+              </td>
+              <td>
+                <button class="basket__list__orderbtn">채팅하기</button>
+              </td>
+            </tr>
+            <hr />
+            <!-- 중국어 교재 -->
+            <hr />
+            <tr class="basket__list__detail">
+              <td style="width: 2%"><input type="checkbox" /></td>
+              <td style="width: 13%">
+                <img
+                  src="https://image.aladin.co.kr/product/6159/17/cover500/8927721632_2.jpg"
+                  alt="..."
+                  style="width: 30px; min-width: 50px"
+                />
+              </td>
+              <td style="width: 27%">
+                <a href="#">중국어마스터기본편 디테일 페이지 링크</a><br /><span
+                  class="basket__list__smartstore"
+                >
+                  스마트스토어(중국어마스터기본편이라 바꿀예정)</span
+                >
+                <p>관광 중국어 마스터 기본편</p>
+                <span class="price">13,000원</span>
+              </td>
+              <td class="basket__list__option" style="width: 27%">
+                <p class="card-text border-top pt-3">
+                  <span class="badge bg-dark">교재</span>
+                  <span class="badge bg-dark">교양</span>
+                </p>
+              </td>
+              <td style="width: 15%">
+                <span class="price">13,900원</span>
+              </td>
+              <td style="width: 15%">
+                <button class="basket__list__orderbtn">채팅하기</button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3">
+                <input type="checkbox" />
+                <button class="basket__list__optionbtn">선택상품 삭제</button>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </form>
+      </table>
+    </divc>
   </div>
 </main>
 {% endblock %}

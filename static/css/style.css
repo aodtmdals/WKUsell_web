@@ -1,5 +1,6 @@
 @import url("product.css");
 @import url("login.css");
+@import url("cart.css");
 
 a,
 a ::after {
@@ -12,4 +13,8 @@ a :hover {
   color: #111;
   opacity: 70%;
   cursor: pointer;
+}
+
+.invisible {
+  display: none;
 }
