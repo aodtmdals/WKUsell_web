@@ -1,33 +1,35 @@
 {% extends "base.html" %} {% block content %}
 <main class="mt-3">
   <div class="container">
-    {% if username %}
-    <div class="create-btn row col-1 mb-3">
-      <button
-        class="btn border-radious btn-outline-secondary"
-        type="button"
-        onclick="location.href='/create';"
-      >
-        글쓰기
-      </button>
-    </div>
-    {% endif %}
+    {% if data == "failed" %}
+    <div class="col-lg-12 mb-3 row align-items-center justify-content-center">{{ nullmessage }}</div>
+    {% else %}
     <div class="row g-3">
-      <!--  -->
+      <!--상품 리스트-->
+      {% for data in datas %}
       <div class="col-lg-4 col-md-6">
+        <a href=""><i class="fa fa-heart"></i></a>
         <div class="card" style="width: 18rem">
-          <a href="/detail">
+          <a onclick="">
             <img
               src="https://image.aladin.co.kr/product/29010/19/cover500/8956615128_1.jpg"
               class="card-img-top"
               alt="..."
           /></a>
           <div class="card-body">
-            <h5 class="card-title">2022 생활과 세무실무[판]</h5>
+            <h5 class="card-title">{data.name}</h5>
             <p class="card-text">
+              {% if data.categori == 0 %}
               <span class="badge bg-dark">교재</span>
-              <span class="badge bg-dark">생활과 세금</span>
-              <span class="badge bg-dark">권영모</span>
+              {% elif data.categori == 1 %}
+              <span class="badge bg-dark">전자기기</span>
+              {% elif data.categori == 2 %}
+              <span class="badge bg-dark">의류</span>
+              {% elif data.categori == 3 %}
+              <span class="badge bg-dark">생필품</span>
+              {% endif %}
+              <span class="badge bg-dark">{data.tags}</span>
+              <span class="badge bg-dark">{data.user_name}</span>
             </p>
             <div class="d-flex justify-content-between align-items-center">
               <div class="btn-group" role="group">
@@ -35,147 +37,14 @@
                   장바구니 담기
                 </button>
               </div>
-              <small class="text-dark">25,000원</small>
+              <small class="text-dark">{data.price}원</small>
             </div>
           </div>
         </div>
       </div>
-      <!--  -->
-      <div class="col-lg-4 col-md-4">
-        <div class="card" style="width: 18rem">
-          <a href="/detail"
-            ><img
-              src="https://image.aladin.co.kr/product/6159/17/cover500/8927721632_2.jpg"
-              class="card-img-top"
-              alt="..."
-          /></a>
-          <div class="card-body">
-            <h5 class="card-title">관광중국어 마스터 기본편</h5>
-            <p class="card-text">
-              <span class="badge bg-dark">교재</span>
-              <span class="badge bg-dark">여헹중국어</span>
-              <span class="badge bg-dark">강성조</span>
-            </p>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="btn-group" role="group">
-                <button type="button" class="btn-sm btn-outline-secondary">
-                  장바구니 담기
-                </button>
-              </div>
-              <small class="text-dark">13,000원</small>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--  -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card" style="width: 18rem">
-          <a href="/detail"
-            ><img
-              src="https://image.aladin.co.kr/product/24364/49/cover500/k162630116_1.jpg"
-              class="card-img-top"
-              alt="..."
-          /></a>
-          <div class="card-body">
-            <h5 class="card-title">이것이 UX/UI 디자인이다</h5>
-            <p class="card-text">
-              <span class="badge bg-dark">교재</span>
-              <span class="badge bg-dark">UX/UI설계</span>
-              <span class="badge bg-dark">문희경</span>
-            </p>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="btn-group" role="group">
-                <button type="button" class="btn-sm btn-outline-secondary">
-                  장바구니 담기
-                </button>
-              </div>
-              <small class="text-dark">28,000원</small>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--  -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card" style="width: 18rem">
-          <a href="/detail"
-            ><img
-              src="https://image.aladin.co.kr/product/12255/67/cover500/k662531858_1.jpg"
-              class="card-img-top"
-              alt="..."
-          /></a>
-          <div class="card-body">
-            <h5 class="card-title">페도라 리눅스</h5>
-            <p class="card-text">
-              <span class="badge bg-dark">교재</span>
-              <span class="badge bg-dark">콘텐츠웹서버와 활용</span>
-              <span class="badge bg-dark">신광성</span>
-            </p>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="btn-group" role="group">
-                <button type="button" class="btn-sm btn-outline-secondary">
-                  장바구니 담기
-                </button>
-              </div>
-              <small class="text-dark">29,000원</small>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--  -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card" style="width: 18rem">
-          <a href="/detail"
-            ><img
-              src="https://image.aladin.co.kr/product/23672/68/cover500/8936319175_1.jpg"
-              class="card-img-top"
-              alt="..."
-          /></a>
-          <div class="card-body">
-            <h5 class="card-title">새로 쓰는 식생활과 건강</h5>
-            <p class="card-text">
-              <span class="badge bg-dark">교재</span>
-              <span class="badge bg-dark">식생활과 건강</span>
-              <span class="badge bg-dark">최일숙</span>
-            </p>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="btn-group" role="group">
-                <button type="button" class="btn-sm btn-outline-secondary">
-                  장바구니 담기
-                </button>
-              </div>
-              <small class="text-dark">22,000원</small>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--  -->
-      <div class="col-lg-4 col-md-6">
-        <div class="card" style="width: 18rem">
-          <a href="/detail"
-            ><img
-              src="https://image.aladin.co.kr/product/13713/61/cover500/892771198x_1.jpg"
-              class="card-img-top"
-              alt="..."
-          /></a>
-          <div class="card-body">
-            <h5 class="card-title">일본, 일본인, 일본문화</h5>
-            <p class="card-text">
-              <span class="badge bg-dark">교재</span>
-              <span class="badge bg-dark">일본대중문화의 이해</span>
-              <span class="badge bg-dark">도꼬로유미</span>
-            </p>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="btn-group" role="group">
-                <button type="button" class="btn-sm btn-outline-secondary">
-                  장바구니 담기
-                </button>
-              </div>
-              <small class="text-dark">15,000원</small>
-            </div>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
     </div>
+    {% endif %}
   </div>
 </main>
 {% endblock %}

@@ -65,48 +65,56 @@
           <input type="text" class="form-control" id="p-tags" />
         </div>
       </div>
+      <!-- 제품 상세글 -->
+      <div class="mb-3 row">
+        <label class="col-md-3 col-form-label">내용</label>
+        <div class="col-md-9">
+          <textarea class="form-control" id="p-detail" col="20" rows="10"></textarea>
+        </div>
+      </div>
       <!-- 썸네일 이미지 -->
       <form id="image-file" method="post" enctype="multipart/form-data">
-      <div class="mb-3 row">
-        <label class="col-md-3 col-form-label">썸네일이미지</label>
-        <div class="col-md-9">
-          <input
-            type="file"
-            id="t-image"
-            class="form-control"
-            accept="image/png, image/jpeg"
-          />
-          <div class="alert alert-secondary" role="alert">
-            <ul>
-              <li>이미지 사이즈 : 350*350</li>
-              <li>파일 사이즈 : 1M 이하</li>
-              <li>파일 확장자 : png, jpg만 가능</li>
-            </ul>
+        <div class="mb-3 row">
+          <label class="col-md-3 col-form-label">썸네일이미지</label>
+          <div class="col-md-9">
+            <input
+              type="file"
+              id="t-image"
+              class="form-control"
+              accept="image/png, image/jpeg"
+            />
+            <div class="alert alert-secondary" role="alert">
+              <ul>
+                <li>이미지 사이즈 : 350*350</li>
+                <li>파일 사이즈 : 1M 이하</li>
+                <li>파일 확장자 : png, jpg만 가능</li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-      <!-- 제품 이미지 -->
-      <div class="mb-3 row">
-        <label class="col-md-3 col-form-label">제품이미지</label>
-        <div class="col-md-9">
-          <input
-            type="file"
-            class="form-control"
-            id="p-image"
-            accept="image/png,image/jpeg"
-            multiple
-          />
-          <div class="alert alert-secondary" role="alert">
-            <ul>
-              <li>최대 5개 가능</li>
-              <li>이미지 사이즈 : 700*700</li>
-              <li>파일 사이즈 : 1M 이하</li>
-              <li>파일 확장자 : png, jpg만 가능</li>
-            </ul>
+        <!-- 제품 이미지 -->
+        <div class="mb-3 row">
+          <label class="col-md-3 col-form-label">제품이미지</label>
+          <div class="col-md-9">
+            <input
+              type="file"
+              class="form-control"
+              name="files[]"
+              id="p-image"
+              accept="image/png,image/jpeg"
+              multiple
+            />
+            <div class="alert alert-secondary" role="alert">
+              <ul>
+                <li>최대 5개 가능</li>
+                <li>이미지 사이즈 : 700*700</li>
+                <li>파일 사이즈 : 1M 이하</li>
+                <li>파일 확장자 : png, jpg만 가능</li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
       <!-- 취소/저장 -->
       <div class="mb-3 row">
         <div class="col-6 d-grid p-1">
@@ -119,7 +127,7 @@
           </button>
         </div>
         <div class="col-6 d-grid p-1">
-          <button class="btn btn-lg btn-danger" onclick="create_product()">
+          <button type="button" class="btn btn-lg btn-danger" onclick="create_product()">
             저장하기
           </button>
         </div>

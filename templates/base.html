@@ -31,33 +31,40 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/">홈</a>
+              <a class="nav-link" aria-current="page" onclick="is_select(this)" href="/">홈</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="/list">교재</a>
+              <a class="nav-link" onclick="is_select(this)">교재</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/list">전자기기</a>
+              <a class="nav-link" onclick="is_select(this)">전자기기</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/list">의류</a>
+              <a class="nav-link" onclick="is_select(this)">의류</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/list">생필품</a>
+              <a class="nav-link" onclick="is_select(this)">생필품</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="is_select(this)">동아리 물품</a>
             </li>
           </ul>
           <!-- 회원가입/ 로그인 버튼-->
           {% if username %}
           <div class="join">
-            <div class="me-4 mb-2 mb-lg-0">
-              <input
-                class="btn btn-outline-secondary"
-                type="button"
-                value="로그아웃"
-                onclick="location.href='/join-out';"
-              />
+            <div>
               <button
-                class="btn btn-outline-secondary"
+                class="btn border-radious btn-outline-secondary me-2 mb-2 mb-lg-0"
+                type="button"
+                onclick="location.href='/create';"
+              >
+                글쓰기
+              </button>
+              <input class="btn btn-outline-secondary me-2 mb-2 mb-lg-0"
+              type="button" value="로그아웃"
+              onclick="location.href='/join-out';" />
+              <button
+                class="btn btn-outline-secondary me-2 mb-2 mb-lg-0"
                 type="button"
                 onclick="location.href='/user';"
               >
@@ -175,12 +182,14 @@
       crossorigin="anonymous"
     ></script>
     <script
-      src="https://code.jquery.com/jquery-3.6.0.slim.js"
-      integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY="
+    src="https://code.jquery.com/jquery-3.5.1.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script src="/static/js/navgation-bar.js" crossorigin="anonymous"></script>
     <script src="/static/js/join.js" crossorigin="anonymous"></script>
     <script src="/static/js/test-login.js" crossorigin="anonymous"></script>
+    <script src="/static/js/product.js" crossorigin="anonymous"></script>
+    <script src="/static/js/find-userdata.js" crossorigin="anonymous"></script>
   </body>
 </html>

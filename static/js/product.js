@@ -4,8 +4,8 @@ function create_product() {
   let category = $("#input-p-category").val();
   let club = $("#check-club").is(":checked");
   let tags = $("#p-tags").val();
+  let detail = $("#p-detail").val();
 
-  console.log(productname, price, category, club);
 
   // // {# help-id가 is-danger 클래스 갖고 있으면 중복검사 통과 못한거니까 아이디 다시 확인해라#}
   // if ($("#p-name").hasClass("is-danger")) {
@@ -29,14 +29,20 @@ function create_product() {
   //   $("#p-price").removeClass("is-danger").addClass("is-success");
   // }
 
+ 
+
   const formData = new FormData();
   formData.append("productname", productname);
   formData.append("price", price);
   formData.append("category", category);
   formData.append("club", club);
   formData.append("tags", tags);
+  formData.append("detail", detail);
   formData.append("tImage", $("#t-image")[0].files[0]);
-  formData.append("pImage", $("#p-image")[0].files[0]);
+  const pImageLength = $("#p-image")[0].files["length"];
+  for(let i =0; i < pImageLength; i++){
+    formData.append("pImage", $("#p-image")[0].files[i]);
+  }
 
   $.ajax({
     type: "POST",
