@@ -1,9 +1,78 @@
 {% extends "base.html" %} {% block content %}
-  <main class="mt-5">
+<main class="mt-5">
   <div class="container">
-    <divc class="user-product">
-        <h2>글 목록</h2>
-    </div>
+    <divc class="basket">
+      <table class="basket__list">    
+        {% if datas == "failed" %}
+        <div class="col-lg-12 mb-3 mt-5 row align-items-center justify-content-center">업로드한 글이 없습니다. 첫 글을 업로드하시겠습니까?</div>
+        <button
+          class="btn border-radious btn-outline-secondary me-2 mb-2 mb-lg-0"
+          type="button"
+          onclick="location.href='/create';"
+        >
+          글쓰기
+        </button>
+        {% else %}
+        <form>
+          <thead>
+            <tr>
+              <td><input type="checkbox" /></td>
+              <td colspan="2">글목록</td>
+              <td>카테고리</td>
+              <td>상품금액</td>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- 생활과세무 교재 -->
+            {% for data in datas %}
+            <tr class="basket__list__detail">
+              <td><input type="checkbox" /></td>
+              <td>
+                <img
+                  src="https://image.aladin.co.kr/product/29010/19/cover500/8956615128_1.jpg"
+                  alt="..."
+                  style="width: 30px; min-width: 50px"
+                />
+              </td>
+              <td>
+                <p class="text-align-center">{{data.product_name}}</p>
+              </td>
+              <td class="basket__list__option align-items-center">
+                  {% if data.categori == "textbook" %}
+                  <span class="badge bg-dark text-align-center">교재</span>
+                  {% elif data.categori == "electronic" %}
+                  <span class="badge bg-dark text-align-center">전자기기</span>
+                  {% elif data.categori == "cloth" %}
+                  <span class="badge bg-dark text-align-center">의류</span>
+                  {% elif data.categori == "necessity" %}
+                  <span class="badge bg-dark text-align-center">생필품</span>
+                  {% endif %}
+                  {% if not data.tags == "Null" %}
+                  <span class="badge bg-dark text-align-center">{{data.tags}}</span>
+                  {% endif %}
+              </td>
+              <td>
+                <span class="price">{{data.product_price}}원</span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3">
+                <input type="checkbox" />
+                <button class="basket__list__optionbtn" onclick="window.location.href='/user/product/{{data.user_id}}/{{data.product_id}}';">선택상품 삭제</button>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </form>
+        {% endif %}
+      </table>
+    </divc>
   </div>
+</main>
 </main>
 {% endblock %}

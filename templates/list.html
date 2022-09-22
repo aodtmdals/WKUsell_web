@@ -1,44 +1,51 @@
 {% extends "base.html" %} {% block content %}
 <main class="mt-3">
   <div class="container">
-    {% if data == "failed" %}
-    <div class="col-lg-12 mb-3 row align-items-center justify-content-center">{{ nullmessage }}</div>
+    {% if datas == "failed" %}
+    <div class="col-lg-12 mb-3 mt-5 row align-items-center justify-content-center">입력된 데이터가 없습니다!</div>
     {% else %}
     <div class="row g-3">
       <!--상품 리스트-->
       {% for data in datas %}
       <div class="col-lg-4 col-md-6">
-        <a href=""><i class="fa fa-heart"></i></a>
-        <div class="card" style="width: 18rem">
-          <a onclick="">
+        <div class="card" style="width: 18rem; height: 39rem">
+          <a href="/detail/{{data.categori}}/{{data.user_id}}/{{data.product_id}}">
             <img
-              src="https://image.aladin.co.kr/product/29010/19/cover500/8956615128_1.jpg"
+              src="/static/img/{{data.user_id}}/{{data.product_id}}/thumnail/{{data.path}}"
               class="card-img-top"
               alt="..."
           /></a>
           <div class="card-body">
-            <h5 class="card-title">{data.name}</h5>
+            <h5 class="card-title">{{data.product_name}}</h5>
             <p class="card-text">
-              {% if data.categori == 0 %}
+              {% if data.categori == "textbook" %}
               <span class="badge bg-dark">교재</span>
-              {% elif data.categori == 1 %}
+              {% elif data.categori == "electronic" %}
               <span class="badge bg-dark">전자기기</span>
-              {% elif data.categori == 2 %}
+              {% elif data.categori == "cloth" %}
               <span class="badge bg-dark">의류</span>
-              {% elif data.categori == 3 %}
+              {% elif data.categori == "necessity" %}
               <span class="badge bg-dark">생필품</span>
               {% endif %}
-              <span class="badge bg-dark">{data.tags}</span>
-              <span class="badge bg-dark">{data.user_name}</span>
+              {% if data.club_check == "Y" %}
+              <span class="badge bg-dark">동아리 물품</span>
+              {% endif %}
+              {% if not data.tags == "Null" %}
+              <span class="badge bg-dark">{{data.tags}}</span>
+              {% endif %}
             </p>
+            <P>올린이 : {{data.user_id}}<P>
             <div class="d-flex justify-content-between align-items-center">
-              <div class="btn-group" role="group">
-                <button type="button" class="btn-sm btn-outline-secondary">
+              <div class="btn-group mb-2" role="group">
+                <button type="button" class="btn btn-outline-secondary">
                   장바구니 담기
                 </button>
+                <button type="button" class="btn btn-outline-danger">
+                  채팅하기
+                </button>
               </div>
-              <small class="text-dark">{data.price}원</small>
             </div>
+            <strong class="text-dark">{{data.product_price}}원</strong>
           </div>
         </div>
       </div>

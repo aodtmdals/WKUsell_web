@@ -1,5 +1,5 @@
 
-import pymysql
+import pymysql, pymysql.cursors
 import hashlib
 
 # 나중에 DB 데이터 받아올 때 클레스로 받아올 수 있게 가볍게 구상해둔 것
@@ -128,71 +128,78 @@ class DB:
         return result
 
     # 제품 등록
-    def insert_product(self, product_id, product_name, product_price, categori, tags, detail, club, user_id):
+    def insert_product(self, product_id, product_name, product_price, categori, tags, detail, club, path, user_id):
         cursor = self.db.cursor()
 
-        sql = """insert into t_product (product_id, product_name, product_price, categori, tags, product_detail, club_check, user_id)
-                values({}, '{}', {}, {}, '{}', '{}', '{}', '{}')"""\
-                .format(product_id, product_name, product_price, categori, tags, detail, club, user_id)
+        sql = """insert into t_product (product_id, product_name, product_price, categori, tags, product_detail, club_check, path, user_id)
+                values({}, '{}', {}, '{}', '{}', '{}', '{}', '{}', '{}')"""\
+                .format(product_id, product_name, product_price, categori, tags, detail, club, path, user_id)
 
-        cursor.execute(sql)
-        self.db.commit()
-
-    def insert_thumnail_img(self, product_id, thumnail, user_id):
-        cursor = self.db.cursor()
-
-        # 1. 썸네일 이미지 먼저 저장
-        sql = """insert into t_image (product_id, type, path, user_id)
-                values({}, 1, '{}', '{}')""".format(product_id, thumnail, user_id)
-        
-        cursor.execute(sql)
-        self.db.commit()
-
-    def insert_product_img(self, product_id, product, user_id):
-        cursor = self.db.cursor()
-
-        # 2. 상품 상세 이미지 다음 저장
-        sql = """insert into t_image (product_id, type, path, user_id)
-                values({}, 2, '{}', '{}')""".format(product_id, product, user_id)
-        
         cursor.execute(sql)
         self.db.commit()
 
     # 제품 조회
-    def get_product_list(self, data, type):
-        cursor = self.db.cursor()
-        # type == 0 : 전체(카테고리로 검색) type == 1 : 유저 정보만(유저아이디로 검색) 
-        # type == 2 : id가 있는지만 확인(카테고리로 검색) type == 3 : 아이디 검색(작성한 글이 있는지)
-        # type == 4 : 이미지 찾기
-        if type == 0:
-            sql = """SELECT t1.product_id, t1.product_name, t1.product_price, t1.categori, 
-                    t1.tags, t1.created_date,  t1.club_check, t1.user_id 
-                    FROM t_product t1 where t1.categori = {}""".format(data)
-        elif type == 1:
+    def get_product_list(self, data):
+        cursor = self.db.cursor(pymysql.cursors.DictCursor)
+        if data == "crew":
             sql = """SELECT t1.product_id, t1.product_name,t1.product_price,t1.categori, 
-                    t1.tags, t1.product_detail, t1.created_date 
-                    FROM t_product t1 where t1.user_id = '{}'""".format(data)
-        elif type == 2:
-            sql = """SELECT t1.id FROM t_product t1 where t1.categori = '{}'""".format(data)
-        elif type == 3:
-            sql = """SELECT t1.id FROM t_product t1 where t1.user_id = '{}'""".format(data)
+                    t1.tags, t1.club_check, t1.path, t1.user_id 
+                    FROM t_product t1 
+                    where t1.club_check = '{}'""".format("Y")
+        else:
+            sql = """SELECT t1.product_id, t1.product_name, t1.product_price, t1.categori, 
+                    t1.tags, t1.path, t1.user_id 
+                    FROM t_product t1 
+                    where t1.categori = '{}'""".format(data)
 
         cursor.execute(sql)
         result = cursor.fetchall()
 
         if(len(result) == 0):
-            result = "false"
+            result = "failed"
             
         return result
 
-    def get_image_list(self, product_id,  user_id):
-        cursor = self.db.cursor()
+    def get_product_detail(self, categori, UID, PID):
+        cursor = self.db.cursor(pymysql.cursors.DictCursor)
+        
+        sql = """SELECT t1.product_id, t1.product_name,t1.product_price,t1.categori, 
+                    t1.tags, t1.product_detail, t1.created_date, t1.club_check, t1.path, t1.user_id  
+                    FROM t_product t1 
+                    where t1.categori = '{}' and t1.user_id = '{}' and t1.product_id = {}"""\
+                        .format(categori, UID, PID)
 
-        sql = """SELECT t1.product_id, t1.type, t1.path, t1.user_id FROM t_image t1 
-            where t1.product_id = {0} and t1.user_id = '{1}'"""\
-            .format(product_id, user_id)
+        cursor.execute(sql)
+        result = cursor.fetchall()
+            
+        return result
+
+    
+    def get_user_product_list(self, data):
+        cursor = self.db.cursor(pymysql.cursors.DictCursor)
+        sql = """SELECT t1.product_id, t1.product_name, t1.product_price, t1.categori, 
+                t1.tags, t1.path
+                FROM t_product t1 
+                where t1.user_id = '{}'""".format(data)
 
         cursor.execute(sql)
         result = cursor.fetchall()
 
+        if(len(result) == 0):
+            result = "failed"
+
         return result
+
+    def delete_product(self, user_id, product_id):
+        cursor = self.db.cursor(pymysql.cursors.DictCursor)
+        sql = """DELETE FROM t_product WHERE t1.product_id = {} and t1.user_id = '{}';""".format(user_id, product_id)
+
+        cursor.execute(sql)
+        result = cursor.fetchall()
+
+        if(len(result) > 1):
+            sql= """
+                SET @COUNT = 0;
+                UPDATE t_product SET id = @COUNT:=@COUNT+1;
+                UPDATE t_product SET user_id = @COUNT:=@COUNT+1;"""
+            cursor.execute(sql)

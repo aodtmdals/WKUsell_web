@@ -119,7 +119,6 @@ function sign_revise() {
   let nickname = $("#input-nickname").val();
   let password = $("#input-password").val();
   let password2 = $("#input-password2").val();
-  let phone = $("#input-phone").val();
 
    if ($("#help-password").hasClass("is-danger")) {
     alert("비밀번호를 다시 확인해주세요.");
