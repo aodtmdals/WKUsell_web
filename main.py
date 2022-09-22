@@ -180,10 +180,21 @@ def detail():
     #상품 정보 받아오기
 
     return render_template("detail.html", username = username)
+
+
+
+
+# 이상한 부분 과정 3
 @app.route("/list", methods=["GET"])
 def get_list_categori():
     datas = "failed"
     return render_template("list.html", datas=datas)
+
+
+
+
+
+
 # 마이페이지 관련 코드
 @app.route("/user")
 def userpage():
@@ -218,6 +229,27 @@ def cart():
     username = session.get("username", None)
     return render_template("cart.html", username = username)
 
+# 다혜 건듦
+@app.route("/elelist")
+def elelist():
+    username = session.get("username", None)
+    return render_template("elelist.html", username = username)
+
+@app.route("/clolist")
+def clolist():
+    username = session.get("username", None)
+    return render_template("clolist.html", username = username)
+
+@app.route("/goodslist")
+def goodslist():
+    username = session.get("username", None)
+    return render_template("goodslist.html", username = username) 
+
+@app.route("/chat")
+def chat():
+    username = session.get("username", None)
+    return render_template("chat.html", username = username) 
+# 여기까지
 
 
 if __name__ == '__main__':
