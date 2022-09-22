@@ -1,149 +1,139 @@
 {% extends "base.html" %} {% block content %}
-<section class="section">
+<!--회원정보 수정 -->
+<main class="mt-3">
   <div class="container">
-    <div class="box">
-      <article class="media">
-        <div class="media-content">
-          <div class="content">
-            <!-- 아이디 -->
-            <div class="field has-addons">
-              <div class="control has-icons-left" style="width: 100%">
-                <input
-                  id="input-username"
-                  class="input"
-                  type="text"
-                  name="revise-id"
-                  placeholder="아이디"
-                  disabled
-                />
-                <span class="icon is-small is-left"
-                  ><i class="fa fa-user"></i
-                ></span>
-              </div>
-            </div>
-            <p id="help-id-login" class="help is-danger"></p>
-            <!-- 닉네임 -->
-            <div class="field has-addons">
-              <div class="control has-icons-left" style="width: 100%">
-                <input
-                  id="input-nickname"
-                  name="nickname"
-                  class="input"
-                  type="text"
-                  placeholder="닉네임"
-                />
-                <span class="icon is-small is-left"
-                  ><i class="fa fa-user"></i
-                ></span>
-              </div>
-            </div>
-            <p id="help-nickname" class="help">
-              닉네임은 2자 이상의 한글, 영문, 숫자 입력이 가능합니다.
-            </p>
-            <p id="help-id-nickname" class="help is-danger"></p>
-
-            <!-- 비밀번호 -->
-            <div class="field">
-              <div class="control has-icons-left">
-                <input
-                  id="input-password"
-                  class="input is-outlined"
-                  type="password"
-                  name="password"
-                  placeholder="비밀번호"
-                />
-                <span class="icon is-small is-left"
-                  ><i class="fa fa-lock"></i
-                ></span>
-              </div>
-              <p id="help-password" class="help">
-                영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요.
-                특수문자(!@#$%^&*)도 사용 가능합니다.
-              </p>
-            </div>
+    <section class="section">
+      <h2 class="text-center mb-3">회원가입</h2>
+      <!-- 아이디 -->
+      <div class="mb-3 row">
+        <label class="col-md-3 col-form-label">아이디</label>
+        <div class="col-md-6">
+          <input
+            id="input-username"
+            class="input form-control"
+            type="text"
+            placeholder="아이디"
+            disabled
+          />
+          <p id="help-id" class="help">
+            아이디는 2-20자의 영문과 숫자와 일부 특수문자(._-)만 입력
+            가능합니다.
+          </p>
+          <p id="help-id-login" class="help is-danger"></p>
+        </div>
+        <div id="btn-check-dup" class="control col-md-2">
+          {# is-hidden = 해당 요소가 안 보이게 하는 bulma의 클래스#}
+          <button class="button is-sparta btn btn-outline-primary" onclick="check_dup()" 
+          disabled>
+            중복확인
+          </button>
+        </div>
+      </div>
+      <!-- 닉네임 -->
+      <div class="mb-3 row">
+        <label class="col-md-3 col-form-label">닉네임</label>
+        <div class="col-md-6">
+          <div class="input-group mb-3">
+            <input
+            id="input-nickname"
+            class="input form-control"
+            type="text"
+            placeholder="닉네임"
+            />
           </div>
-          <!-- 비밀번호 확인 -->
-          <div id="sign-up-box" class="">
-            <div class="mb-5">
-              <div class="field">
-                <div
-                  class="control is-outlined has-icons-left"
-                  style="width: 100%"
-                >
-                  <input
-                    id="input-password2"
-                    class="input"
-                    type="password"
-                    placeholder="비밀번호 재입력"
-                  />
-                  <span class="icon is-small is-left"
-                    ><i class="fa fa-lock"></i
-                  ></span>
-                </div>
-                <p id="help-password2" class="help">
-                  비밀번호를 다시 한 번 입력해주세요.
-                </p>
-              </div>
-            </div>
+          <p id="help-nickname" class="help">
+            닉네임은 2자 이상의 한글, 영문, 숫자 입력이 가능합니다.
+          </p>
+          <p id="help-id-nickname" class="help is-danger"></p>
+        </div>
+      </div>
+      <!-- 비밀번호 -->
+      <div class="mb-3 row">
+        <label class="col-md-3 col-form-label">비밀번호</label>
+        <div class="col-md-6">
+          <div class="row">
+            <input
+              id="input-password"
+              class="input form-control"
+              type="password"
+              placeholder="비밀번호"
+            />
           </div>
-          <!-- 전화번호 입력 -->
-          <div class="field">
-            <div class="control has-icons-left">
-              <input
-                id="input-phone"
-                class="input is-outlined"
-                type="text"
-                name="phone"
-                placeholder="전화번호"
-                disabled
-              />
-            </div>
-            <p id="help-phone" class="help">
-              - 없이 숫자만 입력해주세요.
-            </p>
+          <p id="help-password" class="help">
+            영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요.
+            특수문자(!@#$%^&*)도 사용 가능합니다.
+          </p>
+        </div>
+      </div>
+      <!-- 비밀번호 확인 -->
+      <div class="mb-3 row">
+        <label class="col-md-3 col-form-label">비밀번호 확인</label>
+        <div class="col-md-6">
+          <div class="row">
+            <input
+              id="input-password2"
+              class="input form-control"
+              type="password"
+              placeholder="비밀번호 재입력"
+            />
           </div>
-          <!-- 이메일 입력 -->
-          <div class="field">
-            <div class="control has-icons-left">
-              <input
-                id="input-email"
-                class="input is-outlined"
-                type="text"
-                name="email"
-                placeholder="이메일"
-                disabled
-              />
-              <span
-                >@</span>
-                <input
-                  id="input-email-url"
-                  class="input is-outlined"
-                  type="text"
-                  name="email_url"
-                  placeholder="도메인 주소"
-                  disabled
-                />
-            </div>
+          <p id="help-password2" class="help">
+            비밀번호를 다시 한 번 입력해주세요.
+          </p>
+        </div>
+      </div>
+      <!-- 전화번호 -->
+      <div class="mb-3 row">
+        <label class="col-md-3 col-form-label">전화번호</label>
+        <div class="col-md-6">
+          <div class="row">
+            <input
+            id="input-phone"
+            class="input form-control"
+            type="text"
+            placeholder="전화번호"
+            disabled
+            />
+          </div>
+          <p id="help-phone" class="help">
+            - 없이 숫자만 입력해주세요.
+          </p>
+        </div>
+      </div>
+      <!-- 이메일 입력 -->
+        <div class="mb-3 row">
+          <div class="input-group">
+            <label class="col-md-3 col-form-label">이메일</label>
+              <input type="text" 
+              id="input-email" class="input form-control" 
+              placeholder="이메일" aria-label="email" 
+              disabled>
+              <span class="input-group-text">@</span>
+              <input 
+              id="input-email-url" type="text" class="input form-control" 
+              placeholder="도메인 주소" aria-label="Server" 
+              disabled>
           </div>
         </div>
-            <nav class="level is-mobile">
-              <button
-                class="level-item button is-rounded is-active"
-                onclick="sign_revise()"
-              >
-                정보 수정
-              </button>
-              <button
-                class="level-item button is-rounded is-active"
-                onclick="location.href='/'"
-              >
-                취소
-              </button>
-            </nav>
-          </div>
+      <!-- 취소/저장 -->
+      <div class="mb-3 mt-3 row">
+        <div class="col-6 d-grid p-1">
+          <button
+            type="button"
+            class="btn btn-lg btn-dark"
+            onclick="location.href='/'"
+          >
+            취소
+          </button>
         </div>
-      </article>
-    </div>
+        <div class="col-6 d-grid p-1">
+          <button type="button" class="btn btn-lg btn-danger" 
+          onclick="sign_revise()">
+            정보 수정
+          </button>
+        </div>
+      </div>
+    </section>
   </div>
-</section>
+</main>
 {% endblock %}

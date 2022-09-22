@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, flash, url_for, jsonify
-from flask import session, request
+from flask import session, request, send_from_directory
 from flask_wtf import *
 import os
 from module.DB import DB
@@ -7,8 +7,7 @@ from module.DB import DB
 app = Flask(__name__)
 
 app.secret_key = "secret key"
-
-
+app.config['UPLOAD_FOLDER'] = os.path.join(app.instance_path, 'users')
 
 db = DB()
 
@@ -41,43 +40,37 @@ def create_request():
 
         # 2-1. 동아리 물품 여부 체크
         club = request.form["club"]
-        if club == False:
+        print(club)
+        if club == "false":
             club = "N"
         else:
             club = "Y"
-        
-        print(club)
 
         # 2-2. 태그에 아무것도 안 들어가있으면 tags = "Null"로 값이 없다는 표시 넣어주기
         if tags == "":
             tags = "Null"
 
-        # 3. 사진 외 모든 데이터 먼저 db에 commit
-        db.insert_product(product_id, product_name, product_price, category, tags, detail, club, userID)
-
-        # 4. 이미지 처리
+        # 3. 이미지 처리
         t_image = request.files["tImage"]
-        print(t_image)
-        t_image_path = "D:\WKUsell_web\img\{}\{}\\thumnail\\".format(userID, product_id)
+        t_image_path = "D:\github\WKUsell_web\static\img\{}\{}\\thumnail\\".format(userID, product_id)
         os.makedirs(t_image_path, exist_ok=True)
         t_image_name = t_image.filename
         t_image.save(os.path.join(t_image_path, t_image_name))
-        save_tImg_path = t_image_path + t_image_name
-        print(save_tImg_path)
 
-        #다중 이미지 업로드 오류
+        #다중 이미지 업로드
         p_image = request.files.getlist("pImage")
-        p_image_path = "D:\WKUsell_web\img\{}\{}\product-image\\".format(userID, product_id)
+        p_image_path = "D:\github\WKUsell_web\static\img\{}\{}\product-image\\".format(userID, product_id)
         os.makedirs(p_image_path, exist_ok=True)
-        save_pImg_path = ""
-        for p_image_name in p_image:
-            p_image_name.save(os.path.join(p_image_path, p_image_name.filename))
-            save_pImg_path += p_image_path + p_image_name.filename + ","
-        print(save_pImg_path)
 
-        # DB에 이미지 경로 업로드
-        db.insert_thumnail_img(product_id, save_tImg_path, userID)        
-        db.insert_product_img(product_id, save_pImg_path, userID)
+        # 사이트에 보여주는 건 로직을 조금 더 고민해야할 것 같아 우선 보류
+        # save_pImg_name = ""
+        # for p_image_name in p_image:
+        #     p_image_name.save(os.path.join(p_image_path, p_image_name.filename))
+        #     save_pImg_name += p_image_name.filename + ","\
+
+        # 4. 사진 외 모든 데이터 먼저 db에 commit
+        db.insert_product(product_id, product_name, product_price, category, tags, detail, club, t_image_name, userID)
+
 
         return jsonify({'result': 'success'})
 
@@ -173,22 +166,36 @@ def check_dup():
     return jsonify({'result': 'success', 'exists': exists})
 
 # 상품 디테일 페이지 관련 코드
-@app.route("/detail")
-def detail():
+@app.route("/detail/<categori>/<user_id>/<product_id>")
+def detail(categori, user_id, product_id):
     username = session.get("username", None)
 
     #상품 정보 받아오기
+    datas = db.get_product_detail(categori, user_id, int(product_id))
+    return render_template("detail.html", username = username, datas = datas)
 
-    return render_template("detail.html", username = username)
+@app.route("/list/<string:category>")
+def get_list_category(category):
+    
+    username = session.get("username", None)
 
+    datas = db.get_product_list(category)
+    return render_template("list.html", datas=datas, username=username)
 
+@app.route("/img/<path:filename>")
+def img_download(filename):
+    return send_from_directory(
+        app.config['UPLOAD_FOLDER'], 
+        filename
+    )
 
+@app.route("/list/new/<int:id>")
+def get_list_new(id):
+    pass
 
-# 이상한 부분 과정 3
-@app.route("/list", methods=["GET"])
-def get_list_categori():
-    datas = "failed"
-    return render_template("list.html", datas=datas)
+# @app.route("/list/popular/<int:id>")
+# def get_list_popular(id):
+#     pass
 
 
 
@@ -199,7 +206,9 @@ def get_list_categori():
 @app.route("/user")
 def userpage():
     username = session.get("username", None)
-    return render_template("userpage.html", username = username)
+    userID = session.get("userID", None)
+    return render_template("userpage.html", username = username, userID = userID)
+# 회원정보 수정
 @app.route("/user/revise")
 def user_revise():
     username = session.get("username", None)
@@ -219,11 +228,20 @@ def user_revise_request():
         return redirect(url_for("userpage", username = username))
     else:
         return render_template("index.html", username = username)
-
-@app.route("/user/product")
-def user_product():
+# 업로드한 글 확인
+@app.route("/user/product/<user_id>")
+def user_product(user_id):
     username = session.get("username", None)
-    return render_template("user-product.html", username = username)
+    datas = db.get_user_product_list(user_id)
+    return render_template("user-product.html", username = username, datas = datas)
+# 데이터 삭제
+@app.route("/user/product/<user_id>/<product_id>")
+def delete_user_product(user_id, product_id):
+    username = session.get("username", None)
+    db.delete_product(user_id, product_id)
+    datas = db.get_user_product_list(user_id)
+    return render_template("user-product.html", username = username, datas = datas)
+
 @app.route("/cart")
 def cart():
     username = session.get("username", None)
