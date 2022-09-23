@@ -24,7 +24,7 @@
       <div class="carousel-inner">
         <div class="carousel-item active">
           <img
-            src="https://image.aladin.co.kr/product/29010/19/cover500/8956615128_1.jpg"
+            src="../static/wkuimage.jpg"
             class="d-block w-100"
             alt="..."
           />
@@ -56,11 +56,9 @@
           <div class="product-notice p-2 border border-danger rounded">
             <ul>
               <h2>최신글</h2>
-              <li><a href="/list/new/1">1</a></li>
-              <li><a href="/list/new/2">2</a></li>
-              <li><a href="/list/new/3">3</a></li>
-              <li><a href="/list/new/4">4</a></li>
-              <li><a href="/list/new/5">5</a></li>
+              {% for newdata in newdatas %}
+                <li><a href="/detail/{{newdata.category}}}/{{newdata.user_id}}/{{newdata.product_id}}">{{newdata.product_name}}</a></li>
+              {% endfor %}
             </ul>
           </div>
         <!-- <div class="col-md-6">

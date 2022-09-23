@@ -1,24 +1,38 @@
-function find_id() {
+function veiw_find_form() {
     let radioValue = $("[name=certification]:checked").val();
     let phone = $("#input-phone").val();
     let email = $("#input-email").val();
     let emailUrl = $("#input-email-url").val();
-    let findBtn = $("#find-btn");
-    let insertdata = $("#insert_userdata");
-    let input_data = $("#data").innerHTML();
-    let find_phone = $("#find-phone-box");
-    let find_email = $("#find-email-box");
+    const find_phone = $(".find-phone-box")
+    const find_email = $(".find-email-box")
   
+    console.log(radioValue);
+
     if(radioValue == "phone"){
       find_phone.removeClass("invisible");
       find_email.addClass("invisible");
-      result = phone;
     } else {
       find_phone.addClass("invisible");
       find_email.removeClass("invisible");
-      result = email + "@" + emailUrl;
     }
 
+  }
+
+  function find_id(){
+    let radioValue = $("[name=certification]:checked").val();
+    let phone = $("#input-phone").val();
+    let email = $("#input-email").val();
+    let emailurl = $("#input-email-url").val();
+    let findBtn = $("#find-btn");
+    let insertdata = $("#insert_userdata");
+    let input_data = document.getElementById("id-data");
+
+    if(radioValue == "phone"){
+      result = phone;
+    } else if(radioValue == "email"){
+      result = email + "@" + emailurl
+    }
+    
     $.ajax({
       type: "POST",
       url: "/join-in/find/id/request",
@@ -30,7 +44,7 @@ function find_id() {
       success: function (response) {
         findBtn.addClass("invisible");
         insertdata.removeClass("invisible");
-        input_data = `찾은 아이디는 "${response}"입니다.`;
+        input_data.innerText = `찾은 아이디는 "${response["msg"]}"입니다.`;
       },
     });
   }

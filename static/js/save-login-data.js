@@ -1,6 +1,3 @@
-
-window.Kakao.init("f26ddbae10d2560f5cc2680fa9aecb56");
-
 function saveID() {
   const userID = document.querySelector(".user-id").value;
   const ischecked = document.querySelector("#chk_id").checked;

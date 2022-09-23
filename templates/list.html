@@ -9,22 +9,23 @@
       {% for data in datas %}
       <div class="col-lg-4 col-md-6">
         <div class="card" style="width: 18rem; height: 39rem">
-          <a href="/detail/{{data.categori}}/{{data.user_id}}/{{data.product_id}}">
+          <a href="/detail/{{data.category}}/{{data.user_id}}/{{data.product_id}}">
             <img
               src="/static/img/{{data.user_id}}/{{data.product_id}}/thumnail/{{data.path}}"
               class="card-img-top"
+              style="height: 390px;"
               alt="..."
           /></a>
           <div class="card-body">
             <h5 class="card-title">{{data.product_name}}</h5>
             <p class="card-text">
-              {% if data.categori == "textbook" %}
+              {% if data.category == "textbook" %}
               <span class="badge bg-dark">교재</span>
-              {% elif data.categori == "electronic" %}
+              {% elif data.Z == "electronic" %}
               <span class="badge bg-dark">전자기기</span>
-              {% elif data.categori == "cloth" %}
+              {% elif data.category == "cloth" %}
               <span class="badge bg-dark">의류</span>
-              {% elif data.categori == "necessity" %}
+              {% elif data.category == "necessity" %}
               <span class="badge bg-dark">생필품</span>
               {% endif %}
               {% if data.club_check == "Y" %}
@@ -33,16 +34,30 @@
               {% if not data.tags == "Null" %}
               <span class="badge bg-dark">{{data.tags}}</span>
               {% endif %}
+              {% if data.is_sell == "Y" %}
+                <span class="badge text-danger text-align-center">팔림</span>
+              {% endif %}
             </p>
             <P>올린이 : {{data.user_id}}<P>
             <div class="d-flex justify-content-between align-items-center">
               <div class="btn-group mb-2" role="group">
-                <button type="button" class="btn btn-outline-secondary">
+                {% if data.is_sell == "Y" %}
+                <button type="button" class="btn btn-outline-secondary" 
+                onclick="window.location.href='/list/{{data.category}}/cart/{{data.user_id}}/{{data.product_id}}'" disabled>
+                  장바구니 담기
+                </button>
+                <button type="button" class="btn btn-outline-danger" disabled>
+                  채팅하기
+                </button>
+                {% else %}
+                <button type="button" class="btn btn-outline-secondary" 
+                onclick="window.location.href='/list/{{data.category}}/cart/{{data.user_id}}/{{data.product_id}}'">
                   장바구니 담기
                 </button>
                 <button type="button" class="btn btn-outline-danger">
                   채팅하기
                 </button>
+                {% endif %}
               </div>
             </div>
             <strong class="text-dark">{{data.product_price}}원</strong>
@@ -52,6 +67,25 @@
       {% endfor %}
     </div>
     {% endif %}
+    <div class="mt-4">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
 </main>
 {% endblock %}

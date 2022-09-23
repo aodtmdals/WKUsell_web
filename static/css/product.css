@@ -18,3 +18,8 @@
 .create-btn button {
   float: right;
 }
+
+.user-product-detail:hover{
+  opacity: 70%;
+  cursor:pointer;
+}

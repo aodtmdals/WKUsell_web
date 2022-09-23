@@ -34,9 +34,12 @@
                 {{data.product_name}}
               </h5>
               <p class="card-text border-top pt-3 "> 
-                <span class="badge bg-dark">{{data.categori}}</span>
+                <span class="badge bg-dark">{{data.category}}</span>
                 {% if not data.tags == "Null" %}
                 <span class="badge bg-dark">{{data.tags}}</span>
+                {% endif %}
+                {% if data.is_sell == "Y" %}
+                  <span class="badge text-danger text-align-center">팔림</span>
                 {% endif %}
               </p>
               <p class="card-text pb-3">
@@ -48,10 +51,20 @@
               </div>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="col-6 d-grid p-1">
-                  <button type="button" class="btn btn-lg btn-dark">장바구니 담기</button>
+                  {% if data.is_sell == "Y" %}
+                  <button type="button" class="btn btn-lg btn-dark" 
+                  onclick="window.location.href='/detail/{{data.category}}/cart/{{data.user_id}}/{{data.product_id}}'" disabled>장바구니 담기</button>
+                  {% else %}
+                  <button type="button" class="btn btn-lg btn-dark" 
+                  onclick="window.location.href='/detail/{{data.category}}/cart/{{data.user_id}}/{{data.product_id}}'">장바구니 담기</button>
+                  {% endif %}
                 </div>
                 <div class="col-6 d-grid p-1">
-                  <button type="button" class="btn btn-lg btn-danger">채팅하기</button>
+                  {% if data.is_sell == "Y" %}
+                  <button type="button" class="btn btn-lg btn-danger" onclick="window.location.href='/chat'" disabled>채팅하기</button>
+                  {% else %}
+                  <button type="button" class="btn btn-lg btn-danger" onclick="window.location.href='/chat'">채팅하기</button>
+                  {% endif %}
                 </div>
               </div>   
             </div>
