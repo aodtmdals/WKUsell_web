@@ -1,4 +1,3 @@
-
 import pymysql, pymysql.cursors
 import hashlib
 
@@ -77,9 +76,10 @@ class DB:
 
             cursor.execute(sql)
             result = cursor.fetchall()
+            return result
 
         # value가 1이면 이메일로 찾는 것
-        elif value == 0:
+        elif value == 1:
             cursor = self.db.cursor()
 
             sql = """select t1.id from user_data t1 where t1.email = 
@@ -87,8 +87,7 @@ class DB:
 
             cursor.execute(sql)
             result = cursor.fetchall()
-        
-        return result
+            return result
 
     # 비밀번호 찾기 과정 중 1. 아이디를 찾는다
     def find_password(self, solve):
@@ -128,12 +127,36 @@ class DB:
         return result
 
     # 제품 등록
-    def insert_product(self, product_id, product_name, product_price, categori, tags, detail, club, path, user_id):
+    def insert_product(self, product_id, product_name, product_price, category, tags, detail, club, path, user_id):
         cursor = self.db.cursor()
 
-        sql = """insert into t_product (product_id, product_name, product_price, categori, tags, product_detail, club_check, path, user_id)
+        sql = """insert into t_product (product_id, product_name, product_price, category, tags, product_detail, club_check, path, user_id)
                 values({}, '{}', {}, '{}', '{}', '{}', '{}', '{}', '{}')"""\
-                .format(product_id, product_name, product_price, categori, tags, detail, club, path, user_id)
+                .format(product_id, product_name, product_price, category, tags, detail, club, path, user_id)
+
+        cursor.execute(sql)
+        self.db.commit()
+
+        
+    # 제품 정보 수정
+    def revise_product(self, product_id, product_name, product_price, category, tags, detail, club, path, user_id):
+        cursor = self.db.cursor()
+
+        sql = """update t_product set product_id = '{}', product_price = {}, category = '{}', 
+                tags = '{}', detail = '{}', club = '{}', path = '{}' where user_id = '{}' and product_id = {}"""\
+            .format(product_name, product_price, category, tags, detail, club, path, user_id, product_id)
+
+
+        cursor.execute(sql)
+        self.db.commit()
+
+    # 제품 팔림
+    def is_sell(self, user_id, product_id):
+        cursor = self.db.cursor()
+
+        sql = """update t_product set is_sell = 'Y' where user_id = '{}' and product_id = {}"""\
+            .format(user_id, product_id)
+
 
         cursor.execute(sql)
         self.db.commit()
@@ -142,15 +165,15 @@ class DB:
     def get_product_list(self, data):
         cursor = self.db.cursor(pymysql.cursors.DictCursor)
         if data == "crew":
-            sql = """SELECT t1.product_id, t1.product_name,t1.product_price,t1.categori, 
-                    t1.tags, t1.club_check, t1.path, t1.user_id 
+            sql = """SELECT t1.product_id, t1.product_name,t1.product_price,t1.category, 
+                    t1.tags, t1.club_check, t1.path, t1.user_id, t1.is_sell 
                     FROM t_product t1 
                     where t1.club_check = '{}'""".format("Y")
         else:
-            sql = """SELECT t1.product_id, t1.product_name, t1.product_price, t1.categori, 
-                    t1.tags, t1.path, t1.user_id 
+            sql = """SELECT t1.product_id, t1.product_name, t1.product_price, t1.category, 
+                    t1.tags, t1.path, t1.user_id, t1.is_sell 
                     FROM t_product t1 
-                    where t1.categori = '{}'""".format(data)
+                    where t1.category = '{}'""".format(data)
 
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -160,14 +183,14 @@ class DB:
             
         return result
 
-    def get_product_detail(self, categori, UID, PID):
+    def get_product_detail(self, category, UID, PID):
         cursor = self.db.cursor(pymysql.cursors.DictCursor)
         
-        sql = """SELECT t1.product_id, t1.product_name,t1.product_price,t1.categori, 
-                    t1.tags, t1.product_detail, t1.created_date, t1.club_check, t1.path, t1.user_id  
+        sql = """SELECT t1.product_id, t1.product_name,t1.product_price,t1.category, 
+                    t1.tags, t1.product_detail, t1.created_date, t1.club_check, t1.path, t1.user_id, t1.is_sell  
                     FROM t_product t1 
-                    where t1.categori = '{}' and t1.user_id = '{}' and t1.product_id = {}"""\
-                        .format(categori, UID, PID)
+                    where t1.category = '{}' and t1.user_id = '{}' and t1.product_id = {}"""\
+                        .format(category, UID, PID)
 
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -177,8 +200,8 @@ class DB:
     
     def get_user_product_list(self, data):
         cursor = self.db.cursor(pymysql.cursors.DictCursor)
-        sql = """SELECT t1.product_id, t1.product_name, t1.product_price, t1.categori, 
-                t1.tags, t1.path
+        sql = """SELECT t1.product_id, t1.product_name, t1.product_price, t1.category, 
+                t1.tags, t1.path, t1.user_id, t1.is_sell
                 FROM t_product t1 
                 where t1.user_id = '{}'""".format(data)
 
@@ -189,9 +212,83 @@ class DB:
             result = "failed"
 
         return result
+    
+    # 장바구니 관련 함수
+    #1. 장바구니에 정보 있는지 대조
+    def cart_is_uploaded(self, UID, user_id, product_id):
+        cursor = self.db.cursor()
+
+        sql = """select t1.like_user_id from t_cart t1 
+        where t1.user_id = '{}' and t1.like_product_id = {} and t1.like_user_id = '{}'""".format(UID, product_id, user_id)
+                
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        
+        if(len(result) == 0):
+            result = "failed"
+
+        return result
+
+    #2. 장바구니에 정보 추가
+    def insert_cart(self, UID, product_id, user_id):
+        cursor = self.db.cursor()
+
+        sql = """insert into t_cart (user_id, like_product_id, like_user_id)
+                values('{}', {}, '{}');""".format(UID, product_id, user_id)
+
+        cursor.execute(sql)
+        self.db.commit()
+
+    #3. 장바구니에 있는 정보 받아오기
+    def get_cart_list(self, UID):
+        cursor = self.db.cursor()
+
+        sql = """select t1.like_user_id, t1.like_product_id from t_cart t1 where t1.user_id = '{}'""".format(UID)
+                
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        
+        if(len(result) == 0):
+            result = "failed"
+
+        return result
+
+    #4. 장바구니에 데이터 띄우기
+    def get_cart_data(self, user_id, product_id):
+        cursor = self.db.cursor(pymysql.cursors.DictCursor)
+
+        sql = """select t1.product_id, t1.product_name, t1.category, t1.tags, t1.product_price, t1.path, t1.user_id, t1.is_sell
+                from t_product t1
+                where t1.user_id = '{}' and t1.product_id = {}""".format(user_id, product_id)
+
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        
+
+        return result
+
+    def test(self):
+        cursor = self.db.cursor()
+
+        sql = """insert into test_cart(name) 
+        value('나는 문어~~') """
+
+        cursor.execute(sql)
+        self.db.commit()
+    
+    
+    def get_test(self):
+        cursor = self.db.cursor()
+
+        sql = """select t1.name from test_cart t1"""
+
+        cursor.execute(sql)
+        result = cursor.fetchall()
+
+        return result
 
     def delete_product(self, user_id, product_id):
-        cursor = self.db.cursor(pymysql.cursors.DictCursor)
+        cursor = self.db.cursor()
         sql = """DELETE FROM t_product WHERE t1.product_id = {} and t1.user_id = '{}';""".format(user_id, product_id)
 
         cursor.execute(sql)
@@ -203,3 +300,14 @@ class DB:
                 UPDATE t_product SET id = @COUNT:=@COUNT+1;
                 UPDATE t_product SET user_id = @COUNT:=@COUNT+1;"""
             cursor.execute(sql)
+
+    def select_new_data(self):
+        cursor = self.db.cursor(pymysql.cursors.DictCursor)
+        sql = """select * from t_product
+                order by id DESC
+                limit 0, 5"""
+        
+        cursor.execute(sql)
+        result = cursor.fetchall()
+
+        return result

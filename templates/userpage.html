@@ -3,9 +3,11 @@
   <div class="container">
     <div class="userpage">
         <h2>마이페이지</h2>
-        <a href="/user/revise">회원정보 수정</a>
-        <a href="/user/product/{{userID}}">글 목록</a>
-        <a href="/cart">장바구니</a>
+        <div class="list-group col-md-2 mt-4">
+          <a class="list-group-item list-group-item-action" href="/user/revise">회원정보 수정</a>
+          <a class="list-group-item list-group-item-action" href="/user/product/{{userID}}">글 목록</a>
+          <a class="list-group-item list-group-item-action" href="/user/cart/{{userID}}">장바구니</a>
+        </div>
     </div>
   </div>
 </main>

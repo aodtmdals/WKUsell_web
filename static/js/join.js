@@ -185,16 +185,6 @@ function sign_revise() {
   });
 }
 
-// 회원정보 수정시 ID 값 변경 X
-function disableID() {
-  if (window.localStorage.key("savedID") != null) {
-    $("input[name=revise-id]").attr(
-      "value",
-      window.localStorage.getItem("savedID")
-    );
-  }
-}
-
 // 아이디 중복 검사
 function check_dup() {
   let username = $("#input-username").val();
@@ -262,5 +252,3 @@ function is_phone(asValue) {
   var regExp = /^[0-9]+$/;
   return regExp.test(asValue);
 }
-
-disableID();

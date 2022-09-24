@@ -1,126 +1,17 @@
 {% extends "base.html" %} {% block content %}
-<head>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"
-  />
-  <script
-    src="https://code.jquery.com/jquery-1.8.3.min.js"
-    integrity="sha256-YcbK69I5IXQftf/mYD8WY0/KmEDCv1asggHpJk1trM8="
-    crossorigin="anonymous"
-  ></script>
+<main class="mt-5">
+  <div class="container">
+    <div class="chat_wrap">
+      <div class="inner"></div>
 
-  <style>
-    /* wrap div 테두리, 사이즈와 여백, 폰트사이즈, 텍스트 색상 */
-    .chat_wrap {
-      border: 1px solid #999;
-      width: 300px;
-      padding: 5px;
-      font-size: 13px;
-      color: #333;
-    }
-    /* inner 파란배경, 모서리 둥글, 여백과 세로 스크롤 */
-    .chat_wrap .inner {
-      background-color: #acc2d2;
-      border-radius: 5px;
-      padding: 10px;
-      overflow-y: scroll;
-      height: 400px;
-    }
-    /* 상단 간격 */
-    .chat_wrap .item {
-      margin-top: 15px;
-    }
-    /* 첫상단 뺌 */
-    .chat_wrap .item:first-child {
-      margin-top: 0px;
-    }
-    /* box div 최대너비와 좌우 정렬  */
-    .chat_wrap .item .box {
-      display: inline-block;
-      max-width: 180px;
-      position: relative;
-    }
-    /* box div에 before 가상선택자에 삼각형 스타일을 적용 absolite로 좌측상단에 위치 */
-    .chat_wrap .item .box::before {
-      content: "";
-      position: absolute;
-      left: -8px;
-      top: 9px;
-      border-top: 0px solid transparent;
-      border-bottom: 8px solid transparent;
-      border-right: 8px solid #fff;
-    }
-    /* 메세지영역 흰색 배경색, 모서리 둥글게, 여백과 왼쪽 정렬 */
-    .chat_wrap .item .box .msg {
-      background: #fff;
-      border-radius: 10px;
-      padding: 8px;
-      text-align: left;
-    }
-    /* 메세지 출력시간 우측에 정렬 */
-    .chat_wrap .item .box .time {
-      font-size: 11px;
-      color: #999;
-      position: absolute;
-      right: -75px;
-      bottom: 5px;
-      width: 70px;
-    }
+      <input type="text" class="mymsg" placeholder="내용 입력" />
 
-    /* ** 두번째 item에 mymsg 멀티클래스 적용, 우측정렬 */
-    .chat_wrap .item.mymsg {
-      text-align: right;
-    }
-    /* 삼각형 mymsg 노락색으로 변경 */
-    .chat_wrap .item.mymsg .box::before {
-      left: auto;
-      right: -8px;
-      border-left: 8px solid #fee600;
-      border-right: 0;
-    }
-    /* ** mymsg 색상 노란색 */
-    .chat_wrap .item.mymsg .box .msg {
-      background: #fee600;
-    }
-    /* ** mymsg 출력시간을 메세지 좌측으로 변경 */
-    .chat_wrap .item.mymsg .box .time {
-      right: auto;
-      left: -75px;
-    }
-    /* 메세지 나올 경우 자연스럽게 애니메이션 효과 */
-    .chat_wrap .item .box {
-      transition: all 0.3s ease-out;
-      margin: 0 0 0 20px;
-      opacity: 0;
-    }
-    /* 텍스트 입력폼 */
-    .chat_wrap .item.mymsg .box {
-      transition: all 0.3s ease-out;
-      margin: 0 20px 0 0;
-    }
-    /* transition에 on 클래스로 간격조절 */
-    .chat_wrap .item.on .box {
-      margin: 0;
-      opacity: 1;
-    }
+      <!-- 상대방 메세지 입력폼 -->
+      <!-- <input type="text" class="yourmsg" placeholder="내용 입력" /> -->
+    </div>
+  </div>
+</main>
 
-    /* 텍스트 입력폼 */
-    input[type="text"] {
-      border: 0;
-      width: 100%;
-      background: #ddd;
-      border-radius: 5px;
-      height: 30px;
-      padding-left: 5px;
-      box-sizing: border-box;
-      margin-top: 5px;
-    }
-    /* 텍스트 */
-    input[type="text"]::placeholder {
-      color: #999;
-    }
-  </style>
   <script>
     $(function () {
       $("input[type='text']").keypress(function (e) {
@@ -163,19 +54,6 @@
       return ct;
     };
   </script>
-</head>
-<main class="mt-5">
-  <div class="container">
-    <div class="chat_wrap">
-      <div class="inner"></div>
-
-      <input type="text" class="mymsg" placeholder="내용 입력" />
-
-      <!-- 상대방 메세지 입력폼 -->
-      <!-- <input type="text" class="yourmsg" placeholder="내용 입력" /> -->
-    </div>
-  </div>
-</main>
 {% endblock %}
 
 <!-- 화면 위 채팅 띄우기 -->
