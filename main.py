@@ -362,6 +362,27 @@ def delete_user_product(user_id, product_id):
     return render_template("user-product.html", username = nickname, datas = product_datas)
 
 
+# 다혜 건듦
+@app.route("/elelist")
+def elelist():
+    username = session.get("username", None)
+    return render_template("elelist.html", username = username)
+
+@app.route("/clolist")
+def clolist():
+    username = session.get("username", None)
+    return render_template("clolist.html", username = username)
+
+@app.route("/goodslist")
+def goodslist():
+    username = session.get("username", None)
+    return render_template("goodslist.html", username = username) 
+
+@app.route("/chat")
+def chat():
+    username = session.get("username", None)
+    return render_template("chat.html", username = username) 
+# 여기까지
 
 
 if __name__ == '__main__':

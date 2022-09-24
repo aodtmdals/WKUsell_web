@@ -7,8 +7,8 @@ class DB:
         db = pymysql.connect(host='localhost',
         port=3306,
         user='root',
-        passwd='accle10032',
-        db='wku_market',
+        passwd='0225',
+        db='test_db',
         charset='utf8')
 
         self.db = db
